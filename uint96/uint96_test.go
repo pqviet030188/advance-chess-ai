@@ -425,3 +425,93 @@ func TestCountZeros(t *testing.T) {
 		t.Errorf("Expected to be equals, Result was incorrect, got: %d, want: %d.", val.ZerosCount(), (96 - (9 * 4)))
 	}
 }
+
+func TestCountTrailingZeros(t *testing.T) {
+	val := uint96{
+		Lo:  0x0000ffff,
+		Mid: 0x00000000,
+		Hi:  0x00000000,
+	}
+
+	if val.TrailingZeros() != 0 {
+		t.Errorf("Expected to be equals, Result was incorrect, got: %d, want: %d.", val.TrailingZeros(), 0)
+	}
+
+	val = uint96{
+		Lo:  0x0000fff0,
+		Mid: 0x000ff000,
+		Hi:  0x00000000,
+	}
+
+	if val.TrailingZeros() != 4 {
+		t.Errorf("Expected to be equals, Result was incorrect, got: %d, want: %d.", val.TrailingZeros(), 4)
+	}
+
+	val = uint96{
+		Lo:  0x00000000,
+		Mid: 0x000ff000,
+		Hi:  0x00000000,
+	}
+
+	if val.TrailingZeros() != 32+(4*3) {
+		t.Errorf("Expected to be equals, Result was incorrect, got: %d, want: %d.", val.TrailingZeros(), 32+(4*3))
+	}
+
+	val = uint96{
+		Lo:  0x00000000,
+		Mid: 0x00000000,
+		Hi:  0x00ff0000,
+	}
+
+	if val.TrailingZeros() != 64+(4*4) {
+		t.Errorf("Expected to be equals, Result was incorrect, got: %d, want: %d.", val.TrailingZeros(), 64+(4*4))
+	}
+}
+
+func TestMultiply(t *testing.T) {
+	for i := 0; i < 100; i++ {
+
+		mask := uint96{
+			Lo:  0xffffffff,
+			Mid: 0xffffffff,
+			Hi:  0xffffffff,
+		}
+
+		num1 := randUInt96()
+		// num1 := uint96{
+		// 	Lo:  0xffffffff,
+		// 	Mid: 0xffffffff,
+		// 	Hi:  0xffffffff,
+		// }
+		num1Big := num1.Big()
+
+		num2 := randUInt96()
+		// num2 := uint96{
+		// 	Lo:  0xffffffff,
+		// 	Mid: 0xffffffff,
+		// 	Hi:  0xffffffff,
+		// }
+		num2Big := num2.Big()
+
+		// use new type to cal
+		value, carr := num1.Mul(num2)
+		valueBig := value.Big()
+		carrBig := carr.Big()
+
+		// use big to cal
+		resBig := num1Big.Mul(num1Big, num2Big)
+		lowResBig := resBig.And(resBig, mask.Big())
+
+		num1Big2 := num1.Big()
+		resBig2 := num1Big2.Mul(num1Big2, num2Big)
+		highResBig := resBig2.Rsh(resBig2, 96)
+
+		if valueBig.Cmp(lowResBig) != 0 {
+			t.Errorf("Expected to be equals, Result was incorrect, got: %b, want: %b.", valueBig, lowResBig)
+		}
+
+		if carrBig.Cmp(highResBig) != 0 {
+			t.Errorf("Expected to be equals, Result was incorrect, got: %b, want: %b.", carrBig, highResBig)
+		}
+	}
+}

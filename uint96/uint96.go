@@ -294,6 +294,80 @@ func (u uint96) Sub(value uint96) (uint96, uint32) {
 	return ret, hiborrow
 }
 
+func (u uint96) Mul(value uint96) (uint96, uint96) {
+	hi1, lo := bits.Mul32(u.Lo, value.Lo)
+
+	// cal mid
+	hi2, lo2 := bits.Mul32(u.Mid, value.Lo)
+	hi3, lo3 := bits.Mul32(u.Lo, value.Mid)
+	mid, midc0 := bits.Add32(hi1, lo2, 0)
+	mid, midc1 := bits.Add32(mid, lo3, 0)
+
+	// cal high
+	hi4, lo4 := bits.Mul32(u.Mid, value.Mid)
+	hi5, lo5 := bits.Mul32(u.Hi, value.Lo)
+	hi6, lo6 := bits.Mul32(u.Lo, value.Hi)
+
+	hi, hic0 := bits.Add32(midc0, midc1, 0)
+	hi, hic1 := bits.Add32(hi, hi2, 0)
+	hi, hic2 := bits.Add32(hi, hi3, 0)
+	hi, hic3 := bits.Add32(hi, lo4, 0)
+	hi, hic4 := bits.Add32(hi, lo5, 0)
+	hi, hic5 := bits.Add32(hi, lo6, 0)
+
+	// cal overflow low
+	hi7, lo7 := bits.Mul32(u.Hi, value.Mid)
+	hi8, lo8 := bits.Mul32(u.Mid, value.Hi)
+
+	loov, loovc1 := bits.Add32(hic0, hic1, 0)
+	loov, loovc2 := bits.Add32(loov, hic2, 0)
+	loov, loovc3 := bits.Add32(loov, hic3, 0)
+	loov, loovc4 := bits.Add32(loov, hic4, 0)
+	loov, loovc5 := bits.Add32(loov, hic5, 0)
+	loov, loovc6 := bits.Add32(loov, hi4, 0)
+	loov, loovc7 := bits.Add32(loov, hi5, 0)
+	loov, loovc8 := bits.Add32(loov, hi6, 0)
+	loov, loovc9 := bits.Add32(loov, lo7, 0)
+	loov, loovc10 := bits.Add32(loov, lo8, 0)
+
+	hi9, lo9 := bits.Mul32(u.Hi, value.Hi)
+	midov, midovc1 := bits.Add32(loovc1, loovc2, 0)
+	midov, midovc2 := bits.Add32(midov, loovc3, 0)
+	midov, midovc3 := bits.Add32(midov, loovc4, 0)
+	midov, midovc4 := bits.Add32(midov, loovc5, 0)
+	midov, midovc5 := bits.Add32(midov, loovc6, 0)
+	midov, midovc6 := bits.Add32(midov, loovc7, 0)
+	midov, midovc7 := bits.Add32(midov, loovc8, 0)
+	midov, midovc8 := bits.Add32(midov, loovc9, 0)
+	midov, midovc9 := bits.Add32(midov, loovc10, 0)
+	midov, midovc10 := bits.Add32(midov, hi7, 0)
+	midov, midovc11 := bits.Add32(midov, hi8, 0)
+	midov, midovc12 := bits.Add32(midov, lo9, 0)
+
+	hiov, _ := bits.Add32(midovc1, midovc2, 0)
+	hiov, _ = bits.Add32(hiov, midovc3, 0)
+	hiov, _ = bits.Add32(hiov, midovc4, 0)
+	hiov, _ = bits.Add32(hiov, midovc5, 0)
+	hiov, _ = bits.Add32(hiov, midovc6, 0)
+	hiov, _ = bits.Add32(hiov, midovc7, 0)
+	hiov, _ = bits.Add32(hiov, midovc8, 0)
+	hiov, _ = bits.Add32(hiov, midovc9, 0)
+	hiov, _ = bits.Add32(hiov, midovc10, 0)
+	hiov, _ = bits.Add32(hiov, midovc11, 0)
+	hiov, _ = bits.Add32(hiov, midovc12, 0)
+	hiov, _ = bits.Add32(hiov, hi9, 0)
+
+	return uint96{
+			Lo:  lo,
+			Mid: mid,
+			Hi:  hi,
+		}, uint96{
+			Lo:  loov,
+			Mid: midov,
+			Hi:  hiov,
+		}
+}
+
 // convert to big
 func (u uint96) Big() *big.Int {
 	i := new(big.Int).SetUint64(uint64(u.Hi))
