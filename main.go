@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/pqviet030188/advance-chess-ai/bitboard"
-	"rsc.io/quote"
+	"github.com/pqviet030188/advance-chess-ai/dragon"
 )
 
 func main() {
@@ -22,8 +22,12 @@ func main() {
 	// by := byte(0xff)
 	// by++
 
+	square := uint(bitboard.E5)
+
 	bitboard := bitboard.RandBitboard()
-	fmt.Printf("%s\n", bitboard.Uint96.Str())
 	fmt.Printf("%s\n", bitboard.Str())
-	fmt.Println(quote.Go())
+	fmt.Printf("%s\n", bitboard.Rep())
+
+	mask := dragon.AttackMask(square)
+	fmt.Printf("%s\n", mask.Rep())
 }

@@ -3,28 +3,23 @@ package bitboard
 import (
 	"fmt"
 	"slices"
-	"strings"
 
 	"github.com/pqviet030188/advance-chess-ai/uint96"
 )
 
-type bitboard struct {
+type Bitboard struct {
 	*uint96.Uint96
 }
 
-type Blah struct {
-	Lo, Mid, Hi uint32
-}
-
-func RandBitboard() bitboard {
+func RandBitboard() Bitboard {
 	random := uint96.RandUInt96()
 	mBitboard := random.To81Bitboard()
-	return bitboard{
+	return Bitboard{
 		Uint96: &mBitboard,
 	}
 }
 
-func (b *bitboard) Str() string {
+func (b *Bitboard) StrArr() []string {
 	rows := []string{
 		// bottom
 		"000000000",
@@ -68,5 +63,34 @@ func (b *bitboard) Str() string {
 	}
 
 	slices.Reverse(rows)
-	return strings.Join(rows, "\n")
+	return rows
+}
+
+func (b *Bitboard) Rep() string {
+	rep := b.StrArr()
+	ret := ""
+	for i := 0; i < 9; i++ {
+		ret += fmt.Sprintf("%-5d", (9 - i))
+
+		for j := 0; j < 9; j++ {
+			ret += fmt.Sprintf("%s ", string(rep[i][j]))
+		}
+
+		ret += fmt.Sprintf("%s\n", "")
+	}
+	ret += "\n"
+	ret += fmt.Sprintf("%-5s", "")
+	ret += fmt.Sprintf("%s\n", "A B C D E F G H I ")
+
+	return ret
+}
+
+func (b *Bitboard) CoorStr() string {
+	var ret string = ""
+	for i := 0; i < 9; i++ {
+		ret += fmt.Sprintf("I%d\nH%d\nG%d\nF%d\nE%d\nD%d\nC%d\nB%d\nA%d\n",
+			i+1, i+1, i+1, i+1, i+1, i+1, i+1, i+1, i+1)
+	}
+
+	return ret
 }
