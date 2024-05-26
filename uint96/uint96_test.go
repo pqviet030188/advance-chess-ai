@@ -1,22 +1,12 @@
 package uint96
 
 import (
-	"crypto/rand"
+	"math/big"
+	mrand "math/rand/v2"
 	"testing"
 )
 
-func randomise12Byte() *[]byte {
-	randBuf := make([]byte, 12)
-	rand.Read(randBuf)
-	return &randBuf
-}
-
-func randUInt96() uint96 {
-	randBuf := randomise12Byte()
-	return FromBytes(*randBuf)
-}
-
-func zeroUInt96() uint96 {
+func zeroUInt96() Uint96 {
 	randBuf := make([]byte, 12)
 	return FromBytes(randBuf)
 }
@@ -31,7 +21,7 @@ func TestZero(t *testing.T) {
 }
 
 func TestEqual(t *testing.T) {
-	resultBytes := *randomise12Byte()
+	resultBytes := *Randomise12Byte()
 	expectedBytes := make([]byte, len(resultBytes))
 	copy(expectedBytes, resultBytes)
 
@@ -51,8 +41,8 @@ func TestEqual(t *testing.T) {
 
 func TestAnd(t *testing.T) {
 	for i := 0; i < 100; i++ {
-		num1 := randUInt96()
-		num2 := randUInt96()
+		num1 := RandUInt96()
+		num2 := RandUInt96()
 		num := num1.And(num2).Big()
 
 		num1Big := num1.Big()
@@ -66,8 +56,9 @@ func TestAnd(t *testing.T) {
 
 func TestOr(t *testing.T) {
 	for i := 0; i < 100; i++ {
-		num1 := randUInt96()
-		num2 := randUInt96()
+		num1 := RandUInt96()
+		num2 := RandUInt96()
+
 		num := num1.Or(num2).Big()
 
 		num1Big := num1.Big()
@@ -81,8 +72,8 @@ func TestOr(t *testing.T) {
 
 func TestXor(t *testing.T) {
 	for i := 0; i < 100; i++ {
-		num1 := randUInt96()
-		num2 := randUInt96()
+		num1 := RandUInt96()
+		num2 := RandUInt96()
 		num := num1.Xor(num2).Big()
 
 		num1Big := num1.Big()
@@ -94,9 +85,9 @@ func TestXor(t *testing.T) {
 	}
 }
 
-func lsh(bitshift uint, number uint96, t *testing.T) {
+func lsh(bitshift uint, number Uint96, t *testing.T) {
 
-	mask := uint96{
+	mask := Uint96{
 		Lo:  0xffffffff,
 		Mid: 0xffffffff,
 		Hi:  0xffffffff,
@@ -115,9 +106,9 @@ func lsh(bitshift uint, number uint96, t *testing.T) {
 	}
 }
 
-func rsh(bitshift uint, number uint96, t *testing.T) {
+func rsh(bitshift uint, number Uint96, t *testing.T) {
 
-	mask := uint96{
+	mask := Uint96{
 		Lo:  0xffffffff,
 		Mid: 0xffffffff,
 		Hi:  0xffffffff,
@@ -139,7 +130,7 @@ func rsh(bitshift uint, number uint96, t *testing.T) {
 func TestLsh(t *testing.T) {
 	for i := 0; i < 100; i++ {
 
-		num := randUInt96()
+		num := RandUInt96()
 
 		// shift 96 bits
 		lsh(96, num, t)
@@ -174,7 +165,7 @@ func TestLsh(t *testing.T) {
 func TestRsh(t *testing.T) {
 	for i := 0; i < 100; i++ {
 
-		num := randUInt96()
+		num := RandUInt96()
 
 		// shift 96 bits
 		rsh(96, num, t)
@@ -209,12 +200,12 @@ func TestRsh(t *testing.T) {
 func TestAdd(t *testing.T) {
 	for i := 0; i < 100; i++ {
 
-		num1 := randUInt96()
-		num2 := randUInt96()
+		num1 := RandUInt96()
+		num2 := RandUInt96()
 		sum, _ := num1.Add(num2)
 		sumBig := sum.Big()
 
-		mask := uint96{
+		mask := Uint96{
 			Lo:  0xffffffff,
 			Mid: 0xffffffff,
 			Hi:  0xffffffff,
@@ -235,13 +226,13 @@ func TestAdd(t *testing.T) {
 func TestSub(t *testing.T) {
 	for i := 0; i < 100; i++ {
 
-		num1 := randUInt96()
-		num2 := randUInt96()
+		num1 := RandUInt96()
+		num2 := RandUInt96()
 
 		sub, _ := num1.Sub(num2)
 		subBig := sub.Big()
 
-		mask := uint96{
+		mask := Uint96{
 			Lo:  0xffffffff,
 			Mid: 0xffffffff,
 			Hi:  0xffffffff,
@@ -262,7 +253,7 @@ func TestSub(t *testing.T) {
 func TestReverse(t *testing.T) {
 	for i := 0; i < 100; i++ {
 
-		num := randUInt96()
+		num := RandUInt96()
 		reverse := num.Reverse()
 		start := reverse.Reverse()
 		startBig := start.Big()
@@ -278,7 +269,7 @@ func TestReverse(t *testing.T) {
 func TestFromBig(t *testing.T) {
 	for i := 0; i < 100; i++ {
 
-		num := randUInt96()
+		num := RandUInt96()
 		resBig := num.Big()
 		num2 := FromBig(resBig)
 
@@ -291,7 +282,7 @@ func TestFromBig(t *testing.T) {
 func TestFromBytes(t *testing.T) {
 	for i := 0; i < 100; i++ {
 
-		num := randUInt96()
+		num := RandUInt96()
 		bytes := num.ToBytes()
 		num2 := FromBytes(bytes)
 
@@ -304,7 +295,7 @@ func TestFromBytes(t *testing.T) {
 func TestCopy(t *testing.T) {
 	for i := 0; i < 100; i++ {
 
-		num := randUInt96()
+		num := RandUInt96()
 		new := num.Copy()
 
 		if (&num) == (&new) {
@@ -317,7 +308,7 @@ func TestCopy(t *testing.T) {
 	}
 }
 
-func setBit(i uint, b uint, number uint96, t *testing.T) {
+func setBit(i uint, b uint, number Uint96, t *testing.T) {
 
 	numBig := number.Big()
 	number.SetBit(i, b)
@@ -333,7 +324,7 @@ func setBit(i uint, b uint, number uint96, t *testing.T) {
 func TestSetBitOne(t *testing.T) {
 	for i := 0; i < 100; i++ {
 
-		num := randUInt96()
+		num := RandUInt96()
 		setBit(95, 1, num, t)
 		setBit(70, 1, num, t)
 		setBit(64, 1, num, t)
@@ -349,7 +340,7 @@ func TestSetBitOne(t *testing.T) {
 func TestSetBitZero(t *testing.T) {
 	for i := 0; i < 100; i++ {
 
-		num := randUInt96()
+		num := RandUInt96()
 		setBit(95, 0, num, t)
 		setBit(70, 0, num, t)
 		setBit(64, 0, num, t)
@@ -363,7 +354,7 @@ func TestSetBitZero(t *testing.T) {
 }
 
 func TestCountOnes(t *testing.T) {
-	val := uint96{
+	val := Uint96{
 		Lo:  0x0000ffff,
 		Mid: 0x00000000,
 		Hi:  0x00000000,
@@ -373,7 +364,7 @@ func TestCountOnes(t *testing.T) {
 		t.Errorf("Expected to be equals, Result was incorrect, got: %d, want: %d.", val.OnesCount(), 16)
 	}
 
-	val = uint96{
+	val = Uint96{
 		Lo:  0x0000ffff,
 		Mid: 0x000ff000,
 		Hi:  0x00000000,
@@ -383,7 +374,7 @@ func TestCountOnes(t *testing.T) {
 		t.Errorf("Expected to be equals, Result was incorrect, got: %d, want: %d.", val.OnesCount(), 24)
 	}
 
-	val = uint96{
+	val = Uint96{
 		Lo:  0x0000ffff,
 		Mid: 0x000ff000,
 		Hi:  0x00fff00000,
@@ -395,7 +386,7 @@ func TestCountOnes(t *testing.T) {
 }
 
 func TestCountZeros(t *testing.T) {
-	val := uint96{
+	val := Uint96{
 		Lo:  0x0000ffff,
 		Mid: 0x00000000,
 		Hi:  0x00000000,
@@ -405,7 +396,7 @@ func TestCountZeros(t *testing.T) {
 		t.Errorf("Expected to be equals, Result was incorrect, got: %d, want: %d.", val.ZerosCount(), (96 - 16))
 	}
 
-	val = uint96{
+	val = Uint96{
 		Lo:  0x0000ffff,
 		Mid: 0x000ff000,
 		Hi:  0x00000000,
@@ -415,7 +406,7 @@ func TestCountZeros(t *testing.T) {
 		t.Errorf("Expected to be equals, Result was incorrect, got: %d, want: %d.", val.ZerosCount(), (96 - 24))
 	}
 
-	val = uint96{
+	val = Uint96{
 		Lo:  0x0000ffff,
 		Mid: 0x000ff000,
 		Hi:  0x00fff00000,
@@ -427,7 +418,7 @@ func TestCountZeros(t *testing.T) {
 }
 
 func TestCountTrailingZeros(t *testing.T) {
-	val := uint96{
+	val := Uint96{
 		Lo:  0x0000ffff,
 		Mid: 0x00000000,
 		Hi:  0x00000000,
@@ -437,7 +428,7 @@ func TestCountTrailingZeros(t *testing.T) {
 		t.Errorf("Expected to be equals, Result was incorrect, got: %d, want: %d.", val.TrailingZeros(), 0)
 	}
 
-	val = uint96{
+	val = Uint96{
 		Lo:  0x0000fff0,
 		Mid: 0x000ff000,
 		Hi:  0x00000000,
@@ -447,7 +438,7 @@ func TestCountTrailingZeros(t *testing.T) {
 		t.Errorf("Expected to be equals, Result was incorrect, got: %d, want: %d.", val.TrailingZeros(), 4)
 	}
 
-	val = uint96{
+	val = Uint96{
 		Lo:  0x00000000,
 		Mid: 0x000ff000,
 		Hi:  0x00000000,
@@ -457,7 +448,7 @@ func TestCountTrailingZeros(t *testing.T) {
 		t.Errorf("Expected to be equals, Result was incorrect, got: %d, want: %d.", val.TrailingZeros(), 32+(4*3))
 	}
 
-	val = uint96{
+	val = Uint96{
 		Lo:  0x00000000,
 		Mid: 0x00000000,
 		Hi:  0x00ff0000,
@@ -471,13 +462,13 @@ func TestCountTrailingZeros(t *testing.T) {
 func TestMultiply(t *testing.T) {
 	for i := 0; i < 100; i++ {
 
-		mask := uint96{
+		mask := Uint96{
 			Lo:  0xffffffff,
 			Mid: 0xffffffff,
 			Hi:  0xffffffff,
 		}
 
-		num1 := randUInt96()
+		num1 := RandUInt96()
 		// num1 := uint96{
 		// 	Lo:  0xffffffff,
 		// 	Mid: 0xffffffff,
@@ -485,7 +476,7 @@ func TestMultiply(t *testing.T) {
 		// }
 		num1Big := num1.Big()
 
-		num2 := randUInt96()
+		num2 := RandUInt96()
 		// num2 := uint96{
 		// 	Lo:  0xffffffff,
 		// 	Mid: 0xffffffff,
@@ -494,9 +485,10 @@ func TestMultiply(t *testing.T) {
 		num2Big := num2.Big()
 
 		// use new type to cal
-		value, carr := num1.Mul(num2)
-		valueBig := value.Big()
-		carrBig := carr.Big()
+		// value, carr := num1.Mul(num2)
+		hi, lo := num1.Mul(num2)
+		loBig := lo.Big()
+		hiBig := hi.Big()
 
 		// use big to cal
 		resBig := num1Big.Mul(num1Big, num2Big)
@@ -506,12 +498,62 @@ func TestMultiply(t *testing.T) {
 		resBig2 := num1Big2.Mul(num1Big2, num2Big)
 		highResBig := resBig2.Rsh(resBig2, 96)
 
-		if valueBig.Cmp(lowResBig) != 0 {
-			t.Errorf("Expected to be equals, Result was incorrect, got: %b, want: %b.", valueBig, lowResBig)
+		if loBig.Cmp(lowResBig) != 0 {
+			t.Errorf("Expected to be equals, Result was incorrect, got: %b, want: %b.", loBig, lowResBig)
 		}
 
-		if carrBig.Cmp(highResBig) != 0 {
-			t.Errorf("Expected to be equals, Result was incorrect, got: %b, want: %b.", carrBig, highResBig)
+		if hiBig.Cmp(highResBig) != 0 {
+			t.Errorf("Expected to be equals, Result was incorrect, got: %b, want: %b.", hiBig, highResBig)
+		}
+	}
+}
+
+func TestNot(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		num := RandUInt96()
+		not := num.Not()
+
+		bigNum := num.Big()
+		notex := FromBig(bigNum.Not(bigNum))
+
+		if not != notex {
+			t.Errorf("Expected to be equals, Result was incorrect, got: %b, want: %b.", not, notex)
+		}
+	}
+}
+
+func TestQuorem(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		num := RandUInt96()
+		numBig := num.Big()
+		num2 := RandUInt96()
+		num2Big := num2.Big()
+
+		q, r := numBig.QuoRem(numBig, num2Big, new(big.Int))
+		eq, er := FromBig(q), FromBig(r)
+		o, or := num.QuoRem(num2)
+
+		if o != eq {
+			t.Errorf("Expected to be equals, Result was incorrect, got: %b, want: %b.", o, eq)
+		}
+
+		if or != er {
+			t.Errorf("Expected to be equals, Result was incorrect, got: %b, want: %b.", or, er)
+		}
+	}
+}
+
+func TestGetBit(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		num := RandUInt96()
+		numBig := num.Big()
+		bitIndex := uint(mrand.Int32N(96))
+
+		out := num.GetBit(bitIndex)
+		want := numBig.Bit(int(bitIndex))
+
+		if out != want {
+			t.Errorf("Expected to be equals, Result was incorrect, got: %b, want: %b.", out, want)
 		}
 	}
 }
