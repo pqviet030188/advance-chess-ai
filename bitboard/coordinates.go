@@ -1,7 +1,7 @@
 package bitboard
 
 const (
-	I1 = iota
+	I1 = uint(iota)
 	H1
 	G1
 	F1

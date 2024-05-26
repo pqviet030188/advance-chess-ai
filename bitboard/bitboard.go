@@ -59,6 +59,7 @@ func (b *Bitboard) StrArr() []string {
 		rows[rowIndex] = fmt.Sprintf("%s%1b%s",
 			before, b.GetBit(uint(i)), after)
 
+		// shift bit
 		flag <<= 1
 	}
 
@@ -93,4 +94,8 @@ func (b *Bitboard) CoorStr() string {
 	}
 
 	return ret
+}
+
+func (b *Bitboard) SetBit(square uint, bit uint) {
+	b.Uint96.SetBit(square, bit)
 }

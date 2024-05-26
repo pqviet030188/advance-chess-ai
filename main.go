@@ -23,10 +23,13 @@ func main() {
 	// by++
 
 	square := uint(bitboard.E5)
+	sb := bitboard.I9
+	nbitboard := bitboard.RandBitboard()
+	fmt.Printf("%s\n", nbitboard.Str())
+	fmt.Printf("%s\n", nbitboard.Rep())
 
-	bitboard := bitboard.RandBitboard()
-	fmt.Printf("%s\n", bitboard.Str())
-	fmt.Printf("%s\n", bitboard.Rep())
+	nbitboard.SetBit(sb, 1)
+	fmt.Printf("%s\n", nbitboard.Rep())
 
 	mask := dragon.AttackMask(square)
 	fmt.Printf("%s\n", mask.Rep())
