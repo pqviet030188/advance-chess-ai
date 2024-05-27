@@ -254,17 +254,16 @@ func (u *Uint96) SetBit(i uint, b uint) {
 	}
 }
 
-func (u Uint96) GetBit(i uint) uint {
+func (u *Uint96) GetBit(i uint) uint {
 	if i < 32 {
-		return (uint)((u.Lo & (uint32)(1<<i)) >> i)
+		return (uint)(u.Lo >> i) & 1
 	}
 
 	if i >= 32 && i < 64 {
-		return (uint)((u.Mid & (uint32)(1<<(i-32))) >> (i - 32))
+		return (uint)(u.Mid >> (i-32)) & 1
 	}
 
-	return (uint)((u.Hi & (uint32)(1<<(i-64))) >> (i - 64))
-
+	return (uint)(u.Hi >> (i-64)) & 1
 }
 
 // TrailingZeros returns the number of trailing zero bits in u; the result is
