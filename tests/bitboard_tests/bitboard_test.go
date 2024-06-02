@@ -71,3 +71,74 @@ func TestNewFromString(t *testing.T) {
 		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *board3.Uint96, expected3)
 	}
 }
+
+func TestShiftToMoveCalPositionForLRTB(t *testing.T) {
+	board := NewBitboardFromStr(`
+		000000000
+		000001000
+		000000000
+		101001010
+		011010100
+		000011100
+		000000000
+		000000000
+		000001000
+	`)
+
+	expected := NewBitboardFromStr(`
+		000000000
+		000000001
+		000000000
+		000101001
+		010011010
+		100000011
+		100000000
+		000000000
+		000000001
+	`)
+
+	result := board.ShiftToMoveCalPositionForLRTB(B5)
+
+	// fmt.Printf("%s \n", board.Rep())
+	// fmt.Printf("%s \n", board.ShiftToMoveCalPositionForLRTB(
+	// 	// F8
+	// 	B5).Rep())
+
+	if !result.Uint96.Equals(*expected.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *result.Uint96, *expected.Uint96)
+	}
+
+	board2 := NewBitboardFromStr(`
+		000010000
+		000001000
+		000000000
+		101001000
+		011010101
+		000011100
+		000000000
+		000000000
+		000001000
+	`)
+
+	expected2 := NewBitboardFromStr(`
+		100000000
+		010000000
+		000001010
+		010000110
+		101010000
+		111000000
+		000000000
+		000000000
+		010000000
+	`)
+
+	result2 := board2.ShiftToMoveCalPositionForLRTB(F8)
+
+	// fmt.Printf("%s \n", board2.Rep())
+	// fmt.Printf("%s \n", board2.ShiftToMoveCalPositionForLRTB(
+	// 	F8).Rep())
+
+	if !result2.Uint96.Equals(*expected2.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *result2.Uint96, *expected2.Uint96)
+	}
+}

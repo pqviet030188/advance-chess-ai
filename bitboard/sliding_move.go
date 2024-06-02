@@ -6,7 +6,7 @@ func (board *Bitboard) CalculateHorizontalSlidingMoves(square uint8) *Bitboard {
 	// rowIndex := square / 9
 
 	// // 0->8 right to left
-	colIndex := square % SIZE
+	_, colIndex := ToRowCol(square)
 
 	res := board.Uint96.Copy()
 	res.SetBit(square, 0)
@@ -61,7 +61,7 @@ func (board *Bitboard) CalculateHorizontalSlidingMoves(square uint8) *Bitboard {
 
 func (board *Bitboard) CalculateVerticalSlidingMoves(square uint8) *Bitboard {
 	// 0->8 bottom to top
-	rowIndex := square / 9
+	rowIndex, _ := ToRowCol(square)
 
 	// // 0->8 right to left
 	// colIndex := square % SIZE
@@ -118,7 +118,7 @@ func (board *Bitboard) CalculateVerticalSlidingMoves(square uint8) *Bitboard {
 
 func (board *Bitboard) CalculateLRTBDiagSlidingMoves(square uint8) *Bitboard {
 	// 0->8 bottom to top
-	rowIndex := square / 9
+	rowIndex, _ := ToRowCol(square)
 
 	// // 0->8 right to left
 	// colIndex := square % SIZE
@@ -190,7 +190,7 @@ func (board *Bitboard) CalculateLRTBDiagSlidingMoves(square uint8) *Bitboard {
 
 func (board *Bitboard) CalculateLRBTDiagSlidingMoves(square uint8) *Bitboard {
 	// 0->8 bottom to top
-	rowIndex := square / 9
+	rowIndex, _ := ToRowCol(square)
 
 	// // 0->8 right to left
 	// colIndex := square % SIZE
