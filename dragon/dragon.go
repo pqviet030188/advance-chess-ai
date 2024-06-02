@@ -48,3 +48,6 @@ func AttackMask(square uint) bitboard.Bitboard {
 		Uint96: &ret,
 	}
 }
+
+// calculate move
+// do & near

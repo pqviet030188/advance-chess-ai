@@ -1,9 +1,11 @@
-package uint96
+package uint96_tests
 
 import (
 	"math/big"
 	mrand "math/rand/v2"
 	"testing"
+
+	. "github.com/pqviet030188/advance-chess-ai/uint96"
 )
 
 func zeroUInt96() Uint96 {
