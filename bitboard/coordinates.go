@@ -1,7 +1,9 @@
 package bitboard
 
+const SIZE = uint8(iota + 9)
+
 const (
-	I1 = uint(iota)
+	I1 = uint8(iota)
 	H1
 	G1
 	F1

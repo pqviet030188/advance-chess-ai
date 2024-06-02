@@ -310,13 +310,13 @@ func TestCopy(t *testing.T) {
 	}
 }
 
-func setBit(i uint, b uint, number Uint96, t *testing.T) {
+func setBit(i uint8, b uint8, number Uint96, t *testing.T) {
 
 	numBig := number.Big()
 	number.SetBit(i, b)
 
 	res := number.Big()
-	numBigRes := numBig.SetBit(numBig, int(i), b)
+	numBigRes := numBig.SetBit(numBig, int(i), uint(b))
 
 	if res.Cmp(numBigRes) != 0 {
 		t.Errorf("Expected to be equals, Result was incorrect, got: %b, want: %b.", res, numBigRes)
@@ -549,12 +549,12 @@ func TestGetBit(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		num := RandUInt96()
 		numBig := num.Big()
-		bitIndex := uint(mrand.Int32N(96))
+		bitIndex := uint8(mrand.Int32N(96))
 
 		out := num.GetBit(bitIndex)
 		want := numBig.Bit(int(bitIndex))
 
-		if out != want {
+		if out != uint8(want) {
 			t.Errorf("Expected to be equals, Result was incorrect, got: %b, want: %b.", out, want)
 		}
 	}
