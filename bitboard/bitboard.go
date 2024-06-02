@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/pqviet030188/advance-chess-ai/uint96"
-	. "github.com/pqviet030188/advance-chess-ai/utilities"
+	"github.com/pqviet030188/advance-chess-ai/utilities"
 )
 
 type Bitboard struct {
@@ -25,9 +25,9 @@ func NewBitboardFromStr(board string) *Bitboard {
 
 	ret := uint96.FromUInt32(0)
 
-	fmt.Println(strings.Split(strings.Trim(board, " "), "\n"))
-
-	littleToHighSlices := SliceMap(strings.Split(strings.Join(strings.Split(strings.Trim(board, " "), "\n"), ""), ""), convertToBit)
+	littleToHighSlices := utilities.SliceMap(
+		strings.Split(strings.ReplaceAll(
+			strings.ReplaceAll(strings.ReplaceAll(board, "\n", ""), " ", ""), "\t", ""), ""), convertToBit)
 
 	slices.Reverse(littleToHighSlices)
 
