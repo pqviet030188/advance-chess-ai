@@ -36,4 +36,13 @@ func main() {
 
 	bitboard.GenerateSlidingMoveDictionaryFile("./artifacts/horizontalsm", "./artifacts/verticalsm",
 		"./artifacts/lrtbsm", "./artifacts/lrbtsm")
+
+	bitboard.GenerateFactMaskFile("./artifacts/factmask")
+
+	// mask := bitboard.NewFactBoardDictionaryFromFile("./artifacts/factmask")
+	// for i := range bitboard.SIZE * bitboard.SIZE {
+	// 	// board, _ := mask.GetBoard(i, bitboard.DIRECTIONAL_MASK)
+	// 	board, _ := mask.GetBoard(i, bitboard.NOT_MINER_MASK)
+	// 	fmt.Printf("square: %d\nboard:\n%s\n", i, board.Rep())
+	// }
 }

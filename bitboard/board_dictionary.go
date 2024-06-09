@@ -93,6 +93,17 @@ func (dict *BoardDictionary) Get(key *uint96.Uint96, square uint8) (*uint96.Uint
 	return &copied, true
 }
 
+func (dict *BoardDictionary) GetBoard(key *uint96.Uint96, square uint8) (*Bitboard, bool) {
+	boardNumber, ok := dict.Get(key, square)
+	if !ok {
+		return nil, false
+	}
+
+	return &Bitboard{
+		Uint96: boardNumber,
+	}, true
+}
+
 func (dict *BoardDictionary) Put(key *uint96.Uint96, square uint8, value *uint96.Uint96) {
 	// dict.indices = map[uint32]map[uint32]map[uint32]map[uint8]uint96.Uint96{}
 

@@ -130,6 +130,13 @@ func (b *Bitboard) SetBit(square uint8, bit uint8) {
 	b.Uint96.SetBit(square, bit)
 }
 
+func (b *Bitboard) Copy() *Bitboard {
+	copy := b.Uint96.Copy()
+	return &Bitboard{
+		Uint96: &copy,
+	}
+}
+
 func ToRowCol(square uint8) (row uint8, col uint8) {
 	row = square / SIZE
 	col = square % SIZE

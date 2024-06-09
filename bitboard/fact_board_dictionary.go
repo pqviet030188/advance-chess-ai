@@ -70,6 +70,17 @@ func (dict *FactBoardDictionary) Get(square uint8, maskType uint8) (*uint96.Uint
 	return &maskSearch, true
 }
 
+func (dict *FactBoardDictionary) GetBoard(square uint8, maskType uint8) (*Bitboard, bool) {
+	boardNumber, ok := dict.Get(square, maskType)
+	if !ok {
+		return nil, false
+	}
+
+	return &Bitboard{
+		Uint96: boardNumber,
+	}, true
+}
+
 func (dict *FactBoardDictionary) Put(square uint8, maskType uint8, value *uint96.Uint96) {
 	indices := dict.Indices
 
