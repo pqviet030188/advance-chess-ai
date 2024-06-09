@@ -3,6 +3,8 @@ package main
 import (
 	// "fmt"
 
+	"fmt"
+
 	"github.com/pqviet030188/advance-chess-ai/bitboard"
 	// "github.com/pqviet030188/advance-chess-ai/dragon"
 )
@@ -39,10 +41,10 @@ func main() {
 
 	bitboard.GenerateFactMaskFile("./artifacts/factmask")
 
-	// mask := bitboard.NewFactBoardDictionaryFromFile("./artifacts/factmask")
-	// for i := range bitboard.SIZE * bitboard.SIZE {
-	// 	// board, _ := mask.GetBoard(i, bitboard.DIRECTIONAL_MASK)
-	// 	board, _ := mask.GetBoard(i, bitboard.NOT_MINER_MASK)
-	// 	fmt.Printf("square: %d\nboard:\n%s\n", i, board.Rep())
-	// }
+	mask := bitboard.NewFactBoardDictionaryFromFile("./artifacts/factmask")
+	for i := range bitboard.SIZE * bitboard.SIZE {
+		// board, _ := mask.GetBoard(i, bitboard.DIRECTIONAL_MASK)
+		board, _ := mask.GetBoard(i, bitboard.NOT_NEARBY_MASK)
+		fmt.Printf("square: %d\nboard:\n%s\n", i, board.Rep())
+	}
 }
