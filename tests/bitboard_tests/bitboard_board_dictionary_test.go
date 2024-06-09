@@ -1,4 +1,4 @@
-package board_dictionary_tests
+package bitboard_tests
 
 import (
 	"crypto/rand"
@@ -68,6 +68,56 @@ func TestKeyCount(t *testing.T) {
 
 		if uint32(i)+1 != count {
 			t.Errorf("Expected to be equals, Result was incorrect, got: %d, want: %d.", count, uint32(i)+1)
+		}
+	}
+}
+
+func TestKeys(t *testing.T) {
+	lookup := NewBoardDictionary()
+	count := lookup.KeyCount()
+	if count != 0 {
+		t.Errorf("Exepected to be empty")
+	}
+
+	keyDict := map[BoardDictionaryKey]bool{}
+	retKeyDict := map[BoardDictionaryKey]bool{}
+
+	for range 2 {
+		for {
+			key := uint96.RandUInt96()
+			square := RandomiseSquare()
+			_, ok := lookup.Get(&key, square)
+			if ok {
+				continue
+			}
+
+			value := uint96.RandUInt96()
+			lookup.Put(&key, square, &value)
+
+			bkey := BoardDictionaryKey{
+				Occupancy: key,
+				Square:    square,
+			}
+
+			keyDict[bkey] = true
+			break
+		}
+	}
+
+	keys := lookup.Keys()
+	for _, key := range keys {
+		bkey := BoardDictionaryKey{
+			Occupancy: key.Occupancy,
+			Square:    key.Square,
+		}
+
+		retKeyDict[bkey] = true
+	}
+
+	for key := range keyDict {
+		if has := retKeyDict[key]; !has {
+			t.Errorf("Expected to contain the key, Result was incorrect, got: %s, %d, %t, want: %s, %d, %t.", key.Occupancy.Str(), key.Square, has,
+				key.Occupancy.Str(), key.Square, true)
 		}
 	}
 }

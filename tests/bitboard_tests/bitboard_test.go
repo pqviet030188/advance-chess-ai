@@ -1,4 +1,4 @@
-package board_dictionary_tests
+package bitboard_tests
 
 import (
 	"testing"

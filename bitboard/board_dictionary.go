@@ -16,6 +16,11 @@ type BoardDictionary struct {
 	Indices *map[uint32]map[uint32]map[uint32]map[uint8]uint96.Uint96
 }
 
+type BoardDictionaryKey struct {
+	Occupancy uint96.Uint96
+	Square    uint8
+}
+
 func NewBoardDictionary() *BoardDictionary {
 	var ret = new(BoardDictionary)
 
@@ -37,6 +42,30 @@ func (dict *BoardDictionary) KeyCount() uint32 {
 	}
 
 	return c
+}
+
+func (dict *BoardDictionary) Keys() []BoardDictionaryKey {
+	var keys []BoardDictionaryKey
+
+	for lowKey := range *dict.Indices {
+		for midKey := range (*dict.Indices)[lowKey] {
+			for hiKey := range (*dict.Indices)[lowKey][midKey] {
+				for square := range (*dict.Indices)[lowKey][midKey][hiKey] {
+					key := BoardDictionaryKey{
+						Occupancy: uint96.Uint96{
+							Lo:  lowKey,
+							Mid: midKey,
+							Hi:  hiKey,
+						},
+						Square: square,
+					}
+					keys = append(keys, key)
+				}
+			}
+		}
+	}
+
+	return keys
 }
 
 func (dict *BoardDictionary) Get(key *uint96.Uint96, square uint8) (*uint96.Uint96, bool) {
@@ -68,9 +97,19 @@ func (dict *BoardDictionary) Put(key *uint96.Uint96, square uint8, value *uint96
 	// dict.indices = map[uint32]map[uint32]map[uint32]map[uint8]uint96.Uint96{}
 
 	indices := dict.Indices
-	(*indices)[key.Lo] = map[uint32]map[uint32]map[uint8]uint96.Uint96{}
-	(*indices)[key.Lo][key.Mid] = map[uint32]map[uint8]uint96.Uint96{}
-	(*indices)[key.Lo][key.Mid][key.Hi] = map[uint8]uint96.Uint96{}
+
+	if _, has := (*indices)[key.Lo]; !has {
+		(*indices)[key.Lo] = map[uint32]map[uint32]map[uint8]uint96.Uint96{}
+	}
+
+	if _, has := (*indices)[key.Lo][key.Mid]; !has {
+		(*indices)[key.Lo][key.Mid] = map[uint32]map[uint8]uint96.Uint96{}
+	}
+
+	if _, has := (*indices)[key.Lo][key.Mid][key.Hi]; !has {
+		(*indices)[key.Lo][key.Mid][key.Hi] = map[uint8]uint96.Uint96{}
+	}
+
 	(*indices)[key.Lo][key.Mid][key.Hi][square] = *value
 }
 

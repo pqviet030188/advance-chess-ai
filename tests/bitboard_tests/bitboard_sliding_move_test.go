@@ -1,4 +1,4 @@
-package board_dictionary_tests
+package bitboard_tests
 
 import (
 	"testing"
@@ -71,10 +71,12 @@ func TestVerticalSlidingMoves(t *testing.T) {
 
 	boardValue := res.Uint96
 
+	// fmt.Printf("board: \n%s \n", board.Rep())
+	// fmt.Printf("expected: \n%s \n", expected.Rep())
+	// fmt.Printf("result: \n%s \n", res.Rep())
+
 	if !boardValue.Equals(*expected.Uint96) {
-		// fmt.Printf("board: \n%s \n", board.Rep())
-		// fmt.Printf("expected: \n%s \n", expected.Rep())
-		// fmt.Printf("result: \n%s \n", res.Rep())
+
 		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", boardValue, *expected.Uint96)
 	}
 }
@@ -108,6 +110,10 @@ func TestLRTBDiagSlidingMoves(t *testing.T) {
 	res := board.CalculateLRTBDiagSlidingMoves(E5)
 
 	boardValue := res.Uint96
+
+	// fmt.Printf("board: \n%s \n", board.Rep())
+	// fmt.Printf("expected: \n%s \n", expected.Rep())
+	// fmt.Printf("result: \n%s \n", res.Rep())
 
 	if !boardValue.Equals(*expected.Uint96) {
 		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", boardValue, *expected.Uint96)

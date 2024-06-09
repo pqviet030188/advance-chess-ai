@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
+	// "fmt"
 
 	"github.com/pqviet030188/advance-chess-ai/bitboard"
-	"github.com/pqviet030188/advance-chess-ai/dragon"
+	// "github.com/pqviet030188/advance-chess-ai/dragon"
 )
 
 func main() {
@@ -22,15 +22,18 @@ func main() {
 	// by := byte(0xff)
 	// by++
 
-	square := uint(bitboard.E5)
-	sb := bitboard.I9
-	nbitboard := bitboard.RandBitboard()
-	fmt.Printf("%s\n", nbitboard.Str())
-	fmt.Printf("%s\n", nbitboard.Rep())
+	// square := uint(bitboard.E5)
+	// sb := bitboard.I9
+	// nbitboard := bitboard.RandBitboard()
+	// fmt.Printf("%s\n", nbitboard.Str())
+	// fmt.Printf("%s\n", nbitboard.Rep())
 
-	nbitboard.SetBit(sb, 1)
-	fmt.Printf("%s\n", nbitboard.Rep())
+	// nbitboard.SetBit(sb, 1)
+	// fmt.Printf("%s\n", nbitboard.Rep())
 
-	mask := dragon.AttackMask(square)
-	fmt.Printf("%s\n", mask.Rep())
+	// mask := dragon.AttackMask(square)
+	// fmt.Printf("%s\n", mask.Rep())
+
+	bitboard.GenerateSlidingMoveDictionaryFile("./artifacts/horizontalsm", "./artifacts/verticalsm",
+		"./artifacts/lrtbsm", "./artifacts/lrbtsm")
 }
