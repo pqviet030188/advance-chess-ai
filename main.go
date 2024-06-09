@@ -44,7 +44,30 @@ func main() {
 	mask := bitboard.NewFactBoardDictionaryFromFile("./artifacts/factmask")
 	for i := range bitboard.SIZE * bitboard.SIZE {
 		// board, _ := mask.GetBoard(i, bitboard.DIRECTIONAL_MASK)
-		board, _ := mask.GetBoard(i, bitboard.NOT_NEARBY_MASK)
-		fmt.Printf("square: %d\nboard:\n%s\n", i, board.Rep())
+		board, _ := mask.GetBoard(i, bitboard.ZOMBIE_NEAR_MOVE_MASK)
+		fmt.Printf("ZOMBIE NEAR\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+
+		board, _ = mask.GetBoard(i, bitboard.NOT_ZOMBIE_NEAR_MOVE_MASK)
+		fmt.Printf("NOT ZOMBIE NEAR\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+
+		board, _ = mask.GetBoard(i, bitboard.ZOMBIE_NEAR_ATTACK_MASK)
+		fmt.Printf("ZOMBIE NEAR ATTACK\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+
+		board, _ = mask.GetBoard(i, bitboard.NOT_ZOMBIE_NEAR_ATTACK_MASK)
+		fmt.Printf("NOT ZOMBIE NEAR ATTACK\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+
+		board, _ = mask.GetBoard(i, bitboard.ZOMBIE_FAR_MOVE_MASK)
+		fmt.Printf("ZOMBIE FAR\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+
+		board, _ = mask.GetBoard(i, bitboard.NOT_ZOMBIE_FAR_MOVE_MASK)
+		fmt.Printf("NOT ZOMBIE FAR\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+
+		board, _ = mask.GetBoard(i, bitboard.ZOMBIE_FAR_ATTACK_MASK)
+		fmt.Printf("ZOMBIE FAR ATTACK\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+
+		board, _ = mask.GetBoard(i, bitboard.NOT_ZOMBIE_FAR_ATTACK_MASK)
+		fmt.Printf("NOT ZOMBIE FAR ATTACK\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+		var mode string
+		fmt.Scanf("%s", &mode)
 	}
 }
