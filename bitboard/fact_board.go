@@ -111,10 +111,10 @@ func GenerateNearbyMask(square uint8) *Bitboard {
 		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
 	}
 
-	r, c = row, col
-	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
-		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
-	}
+	// r, c = row, col
+	// if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
+	// 	ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
+	// }
 
 	r, c = row, col-1
 	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
@@ -147,12 +147,12 @@ func GenerateZombieNearMask(square uint8) *Bitboard {
 	row := int(square / 9)
 	col := int(square % 9)
 
-	r, c := row, col
-	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
-		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
-	}
+	// r, c := row, col
+	// if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
+	// 	ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
+	// }
 
-	r, c = row+1, col+1
+	r, c := row+1, col+1
 	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
 		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
 	}
@@ -193,12 +193,12 @@ func GenerateZombieNearMoveMask(square uint8) *Bitboard {
 	row := int(square / 9)
 	col := int(square % 9)
 
-	r, c := row, col
-	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
-		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
-	}
+	// r, c := row, col
+	// if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
+	// 	ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
+	// }
 
-	r, c = row+1, col+1
+	r, c := row+1, col+1
 	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
 		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
 	}
@@ -224,12 +224,12 @@ func GenerateZombieFarMask(square uint8) *Bitboard {
 	row := int(square / 9)
 	col := int(square % 9)
 
-	r, c := row, col
-	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
-		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
-	}
+	// r, c := row, col
+	// if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
+	// 	ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
+	// }
 
-	r, c = row-1, col
+	r, c := row-1, col
 	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
 		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
 	}
@@ -270,12 +270,12 @@ func GenerateZombieFarMoveMask(square uint8) *Bitboard {
 	row := int(square / 9)
 	col := int(square % 9)
 
-	r, c := row, col
-	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
-		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
-	}
+	// r, c := row, col
+	// if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
+	// 	ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
+	// }
 
-	r, c = row-1, col
+	r, c := row-1, col
 	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
 		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
 	}
@@ -301,12 +301,12 @@ func GenerateSentinelMask(square uint8) *Bitboard {
 	row := int(square / 9)
 	col := int(square % 9)
 
-	r, c := row, col
-	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
-		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
-	}
+	// r, c := row, col
+	// if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
+	// 	ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
+	// }
 
-	r, c = row+2, col+1
+	r, c := row+2, col+1
 	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
 		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
 	}
@@ -357,12 +357,12 @@ func GenerateCatapultMask(square uint8) *Bitboard {
 	row := int(square / 9)
 	col := int(square % 9)
 
-	r, c := row, col
-	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
-		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
-	}
+	// r, c := row, col
+	// if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
+	// 	ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
+	// }
 
-	r, c = row+3, col
+	r, c := row+3, col
 	if r >= 0 && r < int(SIZE) && c >= 0 && c < int(SIZE) {
 		ret = ret.Or(uint96.FromUInt32(1).Lsh(uint(r*9 + c)))
 	}
@@ -407,7 +407,7 @@ func GenerateCatapultMask(square uint8) *Bitboard {
 	}
 }
 
-func GenerateFactMask() *FactBoardDictionary {
+func GenerateFactMaskDictionary() *FactBoardDictionary {
 	fact := NewFactBoardDictionary()
 
 	for i := range SIZE * SIZE {
@@ -520,7 +520,7 @@ func GenerateFactMask() *FactBoardDictionary {
 	return fact
 }
 
-func GenerateFactMaskFile(path string) {
-	mask := GenerateFactMask()
+func GenerateFactMaskDictionaryFile(path string) {
+	mask := GenerateFactMaskDictionary()
 	mask.ToFile(path)
 }

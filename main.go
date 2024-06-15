@@ -3,8 +3,6 @@ package main
 import (
 	// "fmt"
 
-	"fmt"
-
 	"github.com/pqviet030188/advance-chess-ai/bitboard"
 	// "github.com/pqviet030188/advance-chess-ai/dragon"
 )
@@ -39,48 +37,66 @@ func main() {
 	bitboard.GenerateSlidingMoveDictionaryFile("./artifacts/horizontalsm", "./artifacts/verticalsm",
 		"./artifacts/lrtbsm", "./artifacts/lrbtsm")
 
-	bitboard.GenerateFactMaskFile("./artifacts/factmask")
+	// horizontalDict := bitboard.NewBoardDictionaryFromFile("./artifacts/horizontalsm")
+	// keys := horizontalDict.Keys()
+	// for _, key := range keys {
+	// 	occupancy := key.Occupancy
+	// 	occupancyBitboard := bitboard.Bitboard{
+	// 		Uint96: &occupancy,
+	// 	}
 
-	mask := bitboard.NewFactBoardDictionaryFromFile("./artifacts/factmask")
-	for i := range bitboard.SIZE * bitboard.SIZE {
-		// board, _ := mask.GetBoard(i, bitboard.DIRECTIONAL_MASK)
-		// board, _ := mask.GetBoard(i, bitboard.ZOMBIE_NEAR_MOVE_MASK)
-		// fmt.Printf("ZOMBIE NEAR\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+	// 	slidingMoves, _ := horizontalDict.GetBoard(&occupancy, key.Square)
 
-		// board, _ = mask.GetBoard(i, bitboard.NOT_ZOMBIE_NEAR_MOVE_MASK)
-		// fmt.Printf("NOT ZOMBIE NEAR\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+	// 	fmt.Printf("occupancy:\n%s\n", occupancyBitboard.Rep())
+	// 	fmt.Printf("square:\n%d\n", key.Square)
+	// 	fmt.Printf("sliding moves:\n%s\n", slidingMoves.Rep())
 
-		// board, _ = mask.GetBoard(i, bitboard.ZOMBIE_NEAR_ATTACK_MASK)
-		// fmt.Printf("ZOMBIE NEAR ATTACK\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+	// 	var mode string
+	// 	fmt.Scanf("%s", &mode)
+	// }
 
-		// board, _ = mask.GetBoard(i, bitboard.NOT_ZOMBIE_NEAR_ATTACK_MASK)
-		// fmt.Printf("NOT ZOMBIE NEAR ATTACK\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+	bitboard.GenerateFactMaskDictionaryFile("./artifacts/factmask")
 
-		// board, _ = mask.GetBoard(i, bitboard.ZOMBIE_FAR_MOVE_MASK)
-		// fmt.Printf("ZOMBIE FAR\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+	// mask := bitboard.NewFactBoardDictionaryFromFile("./artifacts/factmask")
+	// for i := range bitboard.SIZE * bitboard.SIZE {
+	// board, _ := mask.GetBoard(i, bitboard.DIRECTIONAL_MASK)
+	// board, _ := mask.GetBoard(i, bitboard.ZOMBIE_NEAR_MOVE_MASK)
+	// fmt.Printf("ZOMBIE NEAR\nsquare: %d\nboard:\n%s\n", i, board.Rep())
 
-		// board, _ = mask.GetBoard(i, bitboard.NOT_ZOMBIE_FAR_MOVE_MASK)
-		// fmt.Printf("NOT ZOMBIE FAR\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+	// board, _ = mask.GetBoard(i, bitboard.NOT_ZOMBIE_NEAR_MOVE_MASK)
+	// fmt.Printf("NOT ZOMBIE NEAR\nsquare: %d\nboard:\n%s\n", i, board.Rep())
 
-		// board, _ = mask.GetBoard(i, bitboard.ZOMBIE_FAR_ATTACK_MASK)
-		// fmt.Printf("ZOMBIE FAR ATTACK\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+	// board, _ = mask.GetBoard(i, bitboard.ZOMBIE_NEAR_ATTACK_MASK)
+	// fmt.Printf("ZOMBIE NEAR ATTACK\nsquare: %d\nboard:\n%s\n", i, board.Rep())
 
-		// board, _ = mask.GetBoard(i, bitboard.NOT_ZOMBIE_FAR_ATTACK_MASK)
-		// fmt.Printf("NOT ZOMBIE FAR ATTACK\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+	// board, _ = mask.GetBoard(i, bitboard.NOT_ZOMBIE_NEAR_ATTACK_MASK)
+	// fmt.Printf("NOT ZOMBIE NEAR ATTACK\nsquare: %d\nboard:\n%s\n", i, board.Rep())
 
-		board, _ := mask.GetBoard(i, bitboard.SENTINEL_MASK)
-		fmt.Printf("SENTINEL\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+	// board, _ = mask.GetBoard(i, bitboard.ZOMBIE_FAR_MOVE_MASK)
+	// fmt.Printf("ZOMBIE FAR\nsquare: %d\nboard:\n%s\n", i, board.Rep())
 
-		board, _ = mask.GetBoard(i, bitboard.NOT_SENTINEL_MASK)
-		fmt.Printf("NOT SENTINEL\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+	// board, _ = mask.GetBoard(i, bitboard.NOT_ZOMBIE_FAR_MOVE_MASK)
+	// fmt.Printf("NOT ZOMBIE FAR\nsquare: %d\nboard:\n%s\n", i, board.Rep())
 
-		board, _ = mask.GetBoard(i, bitboard.CATAPULT_MASK)
-		fmt.Printf("CATAPULT\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+	// board, _ = mask.GetBoard(i, bitboard.ZOMBIE_FAR_ATTACK_MASK)
+	// fmt.Printf("ZOMBIE FAR ATTACK\nsquare: %d\nboard:\n%s\n", i, board.Rep())
 
-		board, _ = mask.GetBoard(i, bitboard.NOT_CATAPULT_MASK)
-		fmt.Printf("NOT CATAPULT\nsquare: %d\nboard:\n%s\n------------------\n", i, board.Rep())
+	// board, _ = mask.GetBoard(i, bitboard.NOT_ZOMBIE_FAR_ATTACK_MASK)
+	// fmt.Printf("NOT ZOMBIE FAR ATTACK\nsquare: %d\nboard:\n%s\n", i, board.Rep())
 
-		var mode string
-		fmt.Scanf("%s", &mode)
-	}
+	// 	board, _ := mask.GetBoard(i, bitboard.SENTINEL_MASK)
+	// 	fmt.Printf("SENTINEL\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+
+	// 	board, _ = mask.GetBoard(i, bitboard.NOT_SENTINEL_MASK)
+	// 	fmt.Printf("NOT SENTINEL\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+
+	// 	board, _ = mask.GetBoard(i, bitboard.CATAPULT_MASK)
+	// 	fmt.Printf("CATAPULT\nsquare: %d\nboard:\n%s\n", i, board.Rep())
+
+	// 	board, _ = mask.GetBoard(i, bitboard.NOT_CATAPULT_MASK)
+	// 	fmt.Printf("NOT CATAPULT\nsquare: %d\nboard:\n%s\n------------------\n", i, board.Rep())
+
+	// 	var mode string
+	// 	fmt.Scanf("%s", &mode)
+	// }
 }

@@ -397,3 +397,648 @@ func TestGenerateLRBTMask(t *testing.T) {
 		}
 	}
 }
+
+func TestGenerateNearbyMask(t *testing.T) {
+	exp := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000111000
+		000101000
+		000111000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy := exp.Copy()
+	board := GenerateNearbyMask(E5)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		// fmt.Printf("%s %s \n", copy.Rep(), board.Rep())
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000011
+		000000010
+	`)
+
+	copy = exp.Copy()
+	board = GenerateNearbyMask(I1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		010000000
+		110000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateNearbyMask(A9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000010
+		000000011
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateNearbyMask(I9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		110000000
+		010000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateNearbyMask(A1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+}
+
+func TestGenerateZombieNearMask(t *testing.T) {
+	exp := NewBitboardFromStr(`
+		000000000
+		000000000
+		001010100
+		000111000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy := exp.Copy()
+	board := GenerateZombieNearMask(E5)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000101
+		000000011
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieNearMask(I1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieNearMask(A9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieNearMask(I9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		101000000
+		110000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieNearMask(A1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+}
+
+func TestGenerateZombieNearMoveMask(t *testing.T) {
+	exp := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000111000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy := exp.Copy()
+	board := GenerateZombieNearMoveMask(E5)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000011
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieNearMoveMask(I1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieNearMoveMask(A9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieNearMoveMask(I9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		110000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieNearMoveMask(A1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+}
+
+func TestGenerateZombieFarMask(t *testing.T) {
+	exp := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000111000
+		001010100
+		000000000
+		000000000
+	`)
+
+	copy := exp.Copy()
+	board := GenerateZombieFarMask(E5)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieFarMask(I1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		110000000
+		101000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieFarMask(A9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000011
+		000000101
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieFarMask(I9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieFarMask(A1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+}
+
+func TestGenerateZombieFarMoveMask(t *testing.T) {
+	exp := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000111000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy := exp.Copy()
+	board := GenerateZombieFarMoveMask(E5)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieFarMoveMask(I1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		110000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieFarMoveMask(A9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000011
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieFarMoveMask(I9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateZombieFarMoveMask(A1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+}
+
+func TestGenerateSentinelMask(t *testing.T) {
+	exp := NewBitboardFromStr(`
+		000000000
+		000000000
+		000101000
+		001000100
+		000000000
+		001000100
+		000101000
+		000000000
+		000000000
+	`)
+
+	copy := exp.Copy()
+	board := GenerateSentinelMask(E5)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000010
+		000000100
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateSentinelMask(I1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		001000000
+		010000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateSentinelMask(A9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000100
+		000000010
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateSentinelMask(I9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		010000000
+		001000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateSentinelMask(A1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+}
+
+func TestGenerateCatapultMask(t *testing.T) {
+	exp := NewBitboardFromStr(`
+		000000000
+		000010000
+		001000100
+		000000000
+		010000010
+		000000000
+		001000100
+		000010000
+		000000000
+	`)
+
+	copy := exp.Copy()
+	board := GenerateCatapultMask(E5)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000001
+		000000100
+		000000000
+		000001000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateCatapultMask(I1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000100000
+		000000000
+		001000000
+		100000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateCatapultMask(A9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000001000
+		000000000
+		000000100
+		000000001
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateCatapultMask(I9)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		100000000
+		001000000
+		000000000
+		000100000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateCatapultMask(A1)
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+}
