@@ -407,6 +407,45 @@ func GenerateCatapultMask(square uint8) *Bitboard {
 	}
 }
 
+func GenerateLowUintMask() *Bitboard {
+
+	ret := uint96.Uint96{
+		Lo:  0xffffffff,
+		Hi:  0,
+		Mid: 0,
+	}
+
+	return &Bitboard{
+		Uint96: &ret,
+	}
+}
+
+func GenerateMidUintMask() *Bitboard {
+
+	ret := uint96.Uint96{
+		Lo:  0,
+		Mid: 0xffffffff,
+		Hi:  0,
+	}
+
+	return &Bitboard{
+		Uint96: &ret,
+	}
+}
+
+func GenerateHiUintMask() *Bitboard {
+
+	ret := uint96.Uint96{
+		Lo:  0,
+		Mid: 0,
+		Hi:  0xffffffff,
+	}
+
+	return &Bitboard{
+		Uint96: &ret,
+	}
+}
+
 func GenerateFactMaskDictionary() *FactBoardDictionary {
 	fact := NewFactBoardDictionary()
 

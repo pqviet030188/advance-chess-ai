@@ -1042,3 +1042,65 @@ func TestGenerateCatapultMask(t *testing.T) {
 		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
 	}
 }
+
+func TestGenerateUintMask(t *testing.T) {
+	exp := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000011111
+		111111111
+		111111111
+		111111111
+	`)
+
+	copy := exp.Copy()
+	board := GenerateLowUintMask()
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		000000000
+		000000001
+		111111111
+		111111111
+		111111111
+		111100000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+	board = GenerateMidUintMask()
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+
+	exp = NewBitboardFromStr(`
+		111111111
+		111111110
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	copy = exp.Copy()
+
+	DIM := SIZE * SIZE
+	for i := DIM; i < 96; i++ {
+		copy.SetBit(i, 1)
+	}
+
+	board = GenerateHiUintMask()
+	if !copy.Uint96.Equals(*board.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", board.Uint96, copy.Uint96)
+	}
+}
