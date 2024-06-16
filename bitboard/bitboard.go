@@ -143,53 +143,124 @@ func ToRowCol(square uint8) (row uint8, col uint8) {
 	return
 }
 
-func (b *Bitboard) ShiftToMoveCalPositionForLRTB(square uint8) *Bitboard {
+func ToSquare(row uint8, col uint8) uint8 {
+	return row*SIZE + col
+}
 
-	if square == SIZE*SIZE-1 || square == SIZE-1 {
-		res := uint96.FromUInt32(0)
-
-		return &Bitboard{
-			Uint96: &res,
-		}
-	}
-
-	if square == 0 || square == SIZE*SIZE-SIZE {
-		return b
-	}
-
+func shiftDeltaForLRTB(square uint8) int {
 	row, col := ToRowCol(square)
-	// fmt.Printf("row col %d %d\n", row, col)
 	if row == col {
-		return b
+		return 0
 	}
 
 	index := SIZE - 1 - row
-	// if SIZE-1-col < SIZE-1-row {
+
 	if row < col {
 		index = SIZE - 1 - col
 	}
 
 	newSquareRow, newSquareCol := ToRowCol(square + index*(SIZE+1))
 
-	// index := row
-	// delta := newSquareRow - newSquareCol
-	// fmt.Printf("nrow ncol %d %d %d %d\n", index, square+index*(SIZE+1), newSquareRow, newSquareCol)
-
 	if newSquareRow == newSquareCol {
-		return b
+		return 0
 	}
 
 	if newSquareRow > newSquareCol {
-		res := b.Uint96.Lsh(uint(newSquareRow - newSquareCol))
+		return (int(newSquareRow) - int(newSquareCol))
+	}
+
+	return -(int(newSquareCol) - int(newSquareRow))
+}
+
+func (b *Bitboard) Shift(delta int) *Bitboard {
+	if delta == 0 {
+		return b
+	}
+
+	if delta < 0 {
+		res := b.Uint96.Rsh(uint(-delta))
 
 		return &Bitboard{
 			Uint96: &res,
 		}
 	}
 
-	res := b.Uint96.Rsh(uint(newSquareCol - newSquareRow))
+	res := b.Uint96.Lsh(uint(delta))
 
 	return &Bitboard{
 		Uint96: &res,
 	}
+}
+func (b *Bitboard) ShiftToMoveCalPositionForLRTB(square uint8) *Bitboard {
+
+	delta := shiftDeltaForLRTB(square)
+	return b.Shift(delta)
+}
+
+func (b *Bitboard) ReverseShiftToMoveCalPositionForLRTB(orgSquare uint8) *Bitboard {
+
+	delta := shiftDeltaForLRTB(orgSquare)
+	return b.Shift(-delta)
+}
+
+func shiftDeltaForLRBT(square uint8) int {
+
+	row, col := ToRowCol(square)
+	if row+col == SIZE-1 {
+		return 0
+	}
+
+	// below the line
+	if row+col < SIZE-1 {
+		return int((SIZE - 1) - (row + col))
+	}
+	return -int((row + col) - (SIZE - 1))
+}
+
+func (b *Bitboard) ShiftToMoveCalPositionForLRBT(square uint8) *Bitboard {
+
+	delta := shiftDeltaForLRBT(square)
+	return b.Shift(delta)
+}
+
+func (b *Bitboard) ReverseShiftToMoveCalPositionForLRBT(orgSquare uint8) *Bitboard {
+
+	delta := shiftDeltaForLRBT(orgSquare)
+	return b.Shift(-delta)
+}
+
+func shiftDeltaForHor(square uint8) int {
+
+	row, _ := ToRowCol(square)
+	delta := row * SIZE
+	return -(int(delta))
+}
+
+func shiftDeltaForVer(square uint8) int {
+
+	_, col := ToRowCol(square)
+	return -(int(col))
+}
+
+func (b *Bitboard) ShiftToMoveCalPositionForHor(square uint8) *Bitboard {
+
+	delta := shiftDeltaForHor(square)
+	return b.Shift(delta)
+}
+
+func (b *Bitboard) ReverseShiftToMoveCalPositionForHor(orgSquare uint8) *Bitboard {
+
+	delta := shiftDeltaForHor(orgSquare)
+	return b.Shift(-delta)
+}
+
+func (b *Bitboard) ShiftToMoveCalPositionForVer(square uint8) *Bitboard {
+
+	delta := shiftDeltaForVer(square)
+	return b.Shift(delta)
+}
+
+func (b *Bitboard) ReverseShiftToMoveCalPositionForVer(orgSquare uint8) *Bitboard {
+	delta := shiftDeltaForVer(orgSquare)
+	return b.Shift(-delta)
 }
