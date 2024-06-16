@@ -3,6 +3,8 @@ package main
 import (
 	// "fmt"
 
+	"fmt"
+
 	"github.com/pqviet030188/advance-chess-ai/bitboard"
 	// "github.com/pqviet030188/advance-chess-ai/dragon"
 )
@@ -37,7 +39,8 @@ func main() {
 	bitboard.GenerateSlidingMoveDictionaryFile("./artifacts/horizontalsm", "./artifacts/verticalsm",
 		"./artifacts/lrtbsm", "./artifacts/lrbtsm")
 
-	// horizontalDict := bitboard.NewBoardDictionaryFromFile("./artifacts/horizontalsm")
+	horizontalLookup := bitboard.NewBoardDictionaryFromFile("./artifacts/horizontalsm")
+	// verticalLookup := bitboard.NewBoardDictionaryFromFile("./artifacts/verticalsm")
 	// keys := horizontalDict.Keys()
 	// for _, key := range keys {
 	// 	occupancy := key.Occupancy
@@ -56,6 +59,22 @@ func main() {
 	// }
 
 	bitboard.GenerateFactMaskDictionaryFile("./artifacts/factmask")
+	factMask := bitboard.NewFactBoardDictionaryFromFile("./artifacts/factmask")
+
+	board := bitboard.NewBitboardFromStr(`
+		000000000
+		000010100
+		001000000
+		000000100
+		101001011
+		001000000
+		000000100
+		000010000
+		001000000
+	`)
+
+	result := board.HorizontalMove(bitboard.F5, factMask, horizontalLookup)
+	fmt.Printf("Board:\n%s\nResult:\n%s\n", board.Rep(), result.Rep())
 
 	// mask := bitboard.NewFactBoardDictionaryFromFile("./artifacts/factmask")
 	// for i := range bitboard.SIZE * bitboard.SIZE {

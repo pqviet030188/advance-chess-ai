@@ -191,10 +191,10 @@ func (b *Bitboard) Shift(delta int) *Bitboard {
 		Uint96: &res,
 	}
 }
-func (b *Bitboard) ShiftToMoveCalPositionForLRTB(square uint8) *Bitboard {
+func (b *Bitboard) ShiftToMoveCalPositionForLRTB(square uint8) (*Bitboard, uint8) {
 
 	delta := shiftDeltaForLRTB(square)
-	return b.Shift(delta)
+	return b.Shift(delta), uint8(int(square) + int(delta))
 }
 
 func (b *Bitboard) ReverseShiftToMoveCalPositionForLRTB(orgSquare uint8) *Bitboard {
@@ -217,10 +217,10 @@ func shiftDeltaForLRBT(square uint8) int {
 	return -int((row + col) - (SIZE - 1))
 }
 
-func (b *Bitboard) ShiftToMoveCalPositionForLRBT(square uint8) *Bitboard {
+func (b *Bitboard) ShiftToMoveCalPositionForLRBT(square uint8) (*Bitboard, uint8) {
 
 	delta := shiftDeltaForLRBT(square)
-	return b.Shift(delta)
+	return b.Shift(delta), uint8(int(square) + int(delta))
 }
 
 func (b *Bitboard) ReverseShiftToMoveCalPositionForLRBT(orgSquare uint8) *Bitboard {
@@ -242,10 +242,10 @@ func shiftDeltaForVer(square uint8) int {
 	return -(int(col))
 }
 
-func (b *Bitboard) ShiftToMoveCalPositionForHor(square uint8) *Bitboard {
+func (b *Bitboard) ShiftToMoveCalPositionForHor(square uint8) (*Bitboard, uint8) {
 
 	delta := shiftDeltaForHor(square)
-	return b.Shift(delta)
+	return b.Shift(delta), uint8(int(square) + int(delta))
 }
 
 func (b *Bitboard) ReverseShiftToMoveCalPositionForHor(orgSquare uint8) *Bitboard {
@@ -254,10 +254,10 @@ func (b *Bitboard) ReverseShiftToMoveCalPositionForHor(orgSquare uint8) *Bitboar
 	return b.Shift(-delta)
 }
 
-func (b *Bitboard) ShiftToMoveCalPositionForVer(square uint8) *Bitboard {
+func (b *Bitboard) ShiftToMoveCalPositionForVer(square uint8) (*Bitboard, uint8) {
 
 	delta := shiftDeltaForVer(square)
-	return b.Shift(delta)
+	return b.Shift(delta), uint8(int(square) + int(delta))
 }
 
 func (b *Bitboard) ReverseShiftToMoveCalPositionForVer(orgSquare uint8) *Bitboard {

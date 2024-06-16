@@ -83,7 +83,7 @@ func TestShiftToMoveCalPositionForLRTB(t *testing.T) {
 	for square := int(SIZE) - 1; square >= 0; square = square - 1 {
 		mask := GenerateLRTBMask(uint8(square))
 		expected.SetBit(index, 1)
-		result := mask.ShiftToMoveCalPositionForLRTB(uint8(square))
+		result, _ := mask.ShiftToMoveCalPositionForLRTB(uint8(square))
 		reversedResult := result.ReverseShiftToMoveCalPositionForLRTB(uint8(square))
 
 		if !result.Uint96.Equals(*expected.Uint96) {
@@ -119,7 +119,7 @@ func TestShiftToMoveCalPositionForLRTB(t *testing.T) {
 			expected.SetBit(index-SIZE-1, 0)
 		}
 
-		result := mask.ShiftToMoveCalPositionForLRTB(square)
+		result, _ := mask.ShiftToMoveCalPositionForLRTB(square)
 		reversedResult := result.ReverseShiftToMoveCalPositionForLRTB(square)
 
 		if !result.Uint96.Equals(*expected.Uint96) {
@@ -157,7 +157,7 @@ func TestShiftToMoveCalPositionForLRBT(t *testing.T) {
 			expected.SetBit(bitSquare, 0)
 		}
 
-		result := mask.ShiftToMoveCalPositionForLRBT(square)
+		result, _ := mask.ShiftToMoveCalPositionForLRBT(square)
 		reversedResult := result.ReverseShiftToMoveCalPositionForLRBT(square)
 
 		if !result.Uint96.Equals(*expected.Uint96) {
@@ -194,7 +194,7 @@ func TestShiftToMoveCalPositionForLRBT(t *testing.T) {
 			expected.SetBit(bitSquare, 0)
 		}
 
-		result := mask.ShiftToMoveCalPositionForLRBT(square)
+		result, _ := mask.ShiftToMoveCalPositionForLRBT(square)
 		reversedResult := result.ReverseShiftToMoveCalPositionForLRBT(square)
 
 		if !result.Uint96.Equals(*expected.Uint96) {
@@ -228,7 +228,7 @@ func TestShiftToMoveCalPositionForHor(t *testing.T) {
 		square := ToSquare(uint8(row), uint8(0))
 		mask := GenerateHorizontalMask(uint8(square))
 
-		result := mask.ShiftToMoveCalPositionForHor(square)
+		result, _ := mask.ShiftToMoveCalPositionForHor(square)
 		reversedResult := result.ReverseShiftToMoveCalPositionForHor(square)
 
 		if !result.Uint96.Equals(*expected.Uint96) {
@@ -258,7 +258,7 @@ func TestShiftToMoveCalPositionForVer(t *testing.T) {
 		square := ToSquare(uint8(SIZE-1), uint8(col))
 		mask := GenerateVerticalMask(uint8(square))
 
-		result := mask.ShiftToMoveCalPositionForVer(square)
+		result, _ := mask.ShiftToMoveCalPositionForVer(square)
 		reversedResult := result.ReverseShiftToMoveCalPositionForVer(square)
 
 		if !result.Uint96.Equals(*expected.Uint96) {
