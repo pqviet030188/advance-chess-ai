@@ -164,6 +164,22 @@ func (board *Bitboard) LRBTMoveOnly(square uint8, factMask *FactBoardDictionary,
 	return lrbtSlidingBoard
 }
 
+func (board *Bitboard) DirectionalMoveOnly(square uint8, factMask *FactBoardDictionary,
+	lrtbDict *BoardDictionary, lrbtDict *BoardDictionary,
+	horizontalDict *BoardDictionary, verticalDict *BoardDictionary) *Bitboard {
+
+	// lookup move
+	lrbtSlidingBoard := board.LRBTMoveOnly(square, factMask, lrbtDict)
+	lrtbSlidingBoard := board.LRTBMoveOnly(square, factMask, lrtbDict)
+	horSlidingBoard := board.HorizontalMoveOnly(square, factMask, horizontalDict)
+	verSlidingBoard := board.VerticalMoveOnly(square, factMask, verticalDict)
+
+	slidingNumber := lrbtSlidingBoard.Or(*lrtbSlidingBoard.Uint96).Or(*horSlidingBoard.Uint96).Or(*verSlidingBoard.Uint96)
+	return &Bitboard{
+		Uint96: &slidingNumber,
+	}
+}
+
 func (board *Bitboard) HorizontalMove(square uint8, factMask *FactBoardDictionary, horizontalDict *BoardDictionary) *Bitboard {
 
 	// not
@@ -271,12 +287,7 @@ func (board *Bitboard) DirectionalMove(square uint8, factMask *FactBoardDictiona
 	horizontalDict *BoardDictionary, verticalDict *BoardDictionary) *Bitboard {
 
 	// lookup move
-	lrbtSlidingBoard := board.LRBTMoveOnly(square, factMask, lrbtDict)
-	lrtbSlidingBoard := board.LRTBMoveOnly(square, factMask, lrtbDict)
-	horSlidingBoard := board.HorizontalMoveOnly(square, factMask, horizontalDict)
-	verSlidingBoard := board.VerticalMoveOnly(square, factMask, verticalDict)
-
-	slidingNumber := lrbtSlidingBoard.Or(*lrtbSlidingBoard.Uint96).Or(*horSlidingBoard.Uint96).Or(*verSlidingBoard.Uint96)
+	slidingNumber := board.DirectionalMoveOnly(square, factMask, lrtbDict, lrbtDict, horizontalDict, verticalDict)
 
 	// not
 	notmaskNumber, ok := factMask.Get(square, NOT_DIRECTIONAL_MASK)
