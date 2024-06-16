@@ -7,10 +7,9 @@ type GameModel struct {
 	NearPieces *bitboard.Bitboard
 	FarPieces  *bitboard.Bitboard
 
-	Wall *bitboard.Bitboard
-
-	NearSentinelSquares []uint8
-	FarSentinelSquares  []uint8
+	Wall         *bitboard.Bitboard
+	NearSentinel *bitboard.Bitboard
+	FarSentinel  *bitboard.Bitboard
 
 	FactMask       *bitboard.FactBoardDictionary
 	LrtbDict       *bitboard.BoardDictionary
@@ -31,43 +30,42 @@ func (model *GameModel) GetEnemyPieces(side uint8) *bitboard.Bitboard {
 	panic("Side is not valid")
 }
 
-func (model *GameModel) GetEnemySentinelSquares(side uint8) []uint8 {
+func (model *GameModel) GetSentinel(side uint8) *bitboard.Bitboard {
 	if side == NEAR {
-		return model.FarSentinelSquares
+		return model.NearSentinel
 	}
 
 	if side == FAR {
-		return model.NearSentinelSquares
+		return model.FarSentinel
 	}
 
 	panic("Side is not valid")
 }
 
-func (model *GameModel) GetSentinelSquares(side uint8) []uint8 {
+func (model *GameModel) GetEnemySentinel(side uint8) *bitboard.Bitboard {
 	if side == NEAR {
-		return model.NearSentinelSquares
+		return model.FarSentinel
 	}
 
 	if side == FAR {
-		return model.FarSentinelSquares
+		return model.NearSentinel
 	}
 
 	panic("Side is not valid")
 }
 
 func (model *GameModel) GetEnemyProtection(side uint8) *bitboard.Bitboard {
-	enemySentinelSquares := model.GetEnemySentinelSquares(side)
-	return bitboard.SentinelProtection(enemySentinelSquares, model.FactMask)
+	enemySentinel := model.GetEnemySentinel(side)
+	return bitboard.SentinelProtection(enemySentinel, model.FactMask)
 }
 
 func (model *GameModel) GeProtection(side uint8) *bitboard.Bitboard {
-	sentinelSquares := model.GetSentinelSquares(side)
-	return bitboard.SentinelProtection(sentinelSquares, model.FactMask)
+	sentinel := model.GetSentinel(side)
+	return bitboard.SentinelProtection(sentinel, model.FactMask)
 }
 
 func (model *GameModel) RefineAttacksWithEnemySentinelProtection(side uint8, attack *bitboard.Bitboard) *bitboard.Bitboard {
-	enemySentinelSquares := model.GetEnemySentinelSquares(side)
-	enemyProtection := bitboard.SentinelProtection(enemySentinelSquares, model.FactMask)
+	enemyProtection := model.GetEnemyProtection(side)
 
 	// remove enemy protected blocks
 	newAttackNumber := attack.And(enemyProtection.Not())

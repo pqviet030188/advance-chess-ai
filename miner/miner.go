@@ -33,5 +33,7 @@ func GenerateMoves(
 	attack = &bitboard.Bitboard{
 		Uint96: &attackNumber,
 	}
+
+	attack = model.RefineAttacksWithEnemySentinelProtection(side, attack)
 	return move, attack
 }
