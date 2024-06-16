@@ -1,17 +1,9 @@
-package dragon
+package miner
 
 import (
 	"github.com/pqviet030188/advance-chess-ai/bitboard"
 	"github.com/pqviet030188/advance-chess-ai/gamemodel"
 )
-
-func GenerateAllMoves(
-	square uint8,
-	model *gamemodel.GameModel,
-) *bitboard.Bitboard {
-	return model.Everything.DirectionalMoveOnly(square, model.FactMask, model.LrtbDict, model.LrbtDict,
-		model.HorizontalDict, model.VerticalDict)
-}
 
 func GenerateMoves(
 	square uint8,
@@ -20,7 +12,9 @@ func GenerateMoves(
 ) (move *bitboard.Bitboard, attack *bitboard.Bitboard) {
 
 	// get all moves
-	allMoves := GenerateAllMoves(square, model)
+	horizontalMoves := model.Everything.HorizontalMoveOnly(square, model.FactMask, model.HorizontalDict)
+	verticalMoves := model.Everything.VerticalMoveOnly(square, model.FactMask, model.VerticalDict)
+	allMoves := horizontalMoves.Or(*verticalMoves.Uint96)
 
 	// get spaces
 	spaces := model.Everything.Not()
@@ -33,8 +27,7 @@ func GenerateMoves(
 
 	// attack remove nearby squares
 	// and consider enemies only
-	nearby := bitboard.Nearby(square, model.FactMask)
-	attackNumber := allMoves.And(nearby.Not()).And(
+	attackNumber := allMoves.And(
 		*model.GetEnemyPieces(side).Uint96)
 
 	attack = &bitboard.Bitboard{
