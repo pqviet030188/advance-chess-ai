@@ -1,4 +1,4 @@
-package dragon_test
+package pdragon_test
 
 import (
 	"fmt"
@@ -6,8 +6,8 @@ import (
 	"time"
 
 	. "github.com/pqviet030188/advance-chess-ai/bitboard"
-	"github.com/pqviet030188/advance-chess-ai/dragon"
 	"github.com/pqviet030188/advance-chess-ai/gamemodel"
+	dragon "github.com/pqviet030188/advance-chess-ai/pdragon"
 )
 
 func setup(
@@ -113,7 +113,7 @@ func TestDragonMoveAttack(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack := dragon.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack := dragon.GenerateMoves(C2, NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -220,7 +220,7 @@ func TestDragonMoveAttackWithNearbyAttack(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack := dragon.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack := dragon.GenerateMoves(C2, NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -327,7 +327,7 @@ func TestDragonMoveAttackWithEnemySentinelProtection(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack := dragon.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack := dragon.GenerateMoves(C2, NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -435,7 +435,7 @@ func TestDragonMoveAttackWithFalseEnemySentinelProtection(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack := dragon.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack := dragon.GenerateMoves(C2, NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -543,7 +543,7 @@ func TestDragonMoveAttackWithCrossAttackEnemy(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack := dragon.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack := dragon.GenerateMoves(C2, NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -652,7 +652,7 @@ func TestDragonMoveAttackWithCrossAttackSentinelProtection(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack := dragon.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack := dragon.GenerateMoves(C2, NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 

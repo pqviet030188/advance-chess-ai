@@ -1,4 +1,4 @@
-package dragon_test
+package pminer_test
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 
 	. "github.com/pqviet030188/advance-chess-ai/bitboard"
 	"github.com/pqviet030188/advance-chess-ai/gamemodel"
-	"github.com/pqviet030188/advance-chess-ai/miner"
+	miner "github.com/pqviet030188/advance-chess-ai/pminer"
 )
 
 func setup(
@@ -113,7 +113,7 @@ func TestMinerMoveAttack(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack, destroy := miner.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack, destroy := miner.GenerateMoves(C2, NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -238,7 +238,7 @@ func TestMinerMoveAttackWithNearbyAttack(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack, destroy := miner.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack, destroy := miner.GenerateMoves(C2, NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -361,7 +361,7 @@ func TestMinerMoveAttackWithEnemySentinelProtection(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack, destroy := miner.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack, destroy := miner.GenerateMoves(C2, NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -485,7 +485,7 @@ func TestMinerMoveAttackWithFalseEnemySentinelProtection(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack, destroy := miner.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack, destroy := miner.GenerateMoves(C2, NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -609,7 +609,7 @@ func TestMinerMoveAttackWithCrossAttackEnemy(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack, destroy := miner.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack, destroy := miner.GenerateMoves(C2, NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -734,7 +734,7 @@ func TestMinerMoveAttackWithCrossAttackSentinelProtection(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack, destroy := miner.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack, destroy := miner.GenerateMoves(C2, NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 

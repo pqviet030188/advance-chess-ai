@@ -69,11 +69,11 @@ func (model *GameModel) GetEverything(updateSides bool, update bool) *bitboard.B
 }
 
 func (model *GameModel) GetEnemyPieces(side uint8) *bitboard.Bitboard {
-	if side == NEAR {
+	if side == bitboard.NEAR {
 		return model.FarPieces
 	}
 
-	if side == FAR {
+	if side == bitboard.FAR {
 		return model.NearPieces
 	}
 
@@ -81,11 +81,11 @@ func (model *GameModel) GetEnemyPieces(side uint8) *bitboard.Bitboard {
 }
 
 func (model *GameModel) GetSentinel(side uint8) *bitboard.Bitboard {
-	if side == NEAR {
+	if side == bitboard.NEAR {
 		return model.NearSentinel
 	}
 
-	if side == FAR {
+	if side == bitboard.FAR {
 		return model.FarSentinel
 	}
 
@@ -93,11 +93,11 @@ func (model *GameModel) GetSentinel(side uint8) *bitboard.Bitboard {
 }
 
 func (model *GameModel) GetEnemySentinel(side uint8) *bitboard.Bitboard {
-	if side == NEAR {
+	if side == bitboard.NEAR {
 		return model.FarSentinel
 	}
 
-	if side == FAR {
+	if side == bitboard.FAR {
 		return model.NearSentinel
 	}
 
