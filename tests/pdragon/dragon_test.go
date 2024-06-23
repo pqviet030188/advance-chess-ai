@@ -696,3 +696,112 @@ func TestDragonMoveAttackWithCrossAttackSentinelProtection(t *testing.T) {
 	// fmt.Printf("attack:\n%s\n", attack.Rep())
 	// fmt.Printf("attackExpected:\n%s\n", attackExpected.Rep())
 }
+
+func TestDragonMoveAttackWithWalls(t *testing.T) {
+	wall := `
+		000000000
+		001000000
+		000000000
+		000000100
+		000000000
+		000000000
+		000100000
+		100001010
+		000000000
+	`
+
+	nearPieces := `
+		000000000
+		001010000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		001000010
+		000000000
+	`
+
+	farPieces := `
+		000000000
+		000000000
+		000000000
+		001101000
+		000111000
+		001110000
+		000000000
+		000000100
+		000000000
+	`
+
+	nearSentinel := `
+		000000000
+		000010000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`
+
+	farSentinel := `
+		000000000
+		000000000
+		000000000
+		000101000
+		000101000
+		000000000
+		000000000
+		000000000
+		000000000
+	`
+
+	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+
+	start := time.Now()
+	move, attack := dragon.GenerateMoves(C2, NEAR, model)
+	duration := time.Since(start)
+	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
+
+	moveExpected := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		100000000
+		011000000
+		010110000
+		011100000
+	`)
+
+	attackExpected := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		001000000
+		000000000
+		000000000
+		000000000
+	`)
+
+	if !move.Uint96.Equals(*moveExpected.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *move.Uint96, *moveExpected.Uint96)
+	}
+
+	if !attack.Uint96.Equals(*attackExpected.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *attack.Uint96, *attackExpected.Uint96)
+	}
+
+	// fmt.Printf("everything:\n%s\n", model.Everything.Rep())
+	// fmt.Printf("near sentinel:\n%s\n", model.NearSentinel.Rep())
+	// fmt.Printf("far sentinel:\n%s\n", model.FarSentinel.Rep())
+	// fmt.Printf("move:\n%s\n", move.Rep())
+	// fmt.Printf("moveExpected:\n%s\n", moveExpected.Rep())
+	// fmt.Printf("attack:\n%s\n", attack.Rep())
+	// fmt.Printf("attackExpected:\n%s\n", attackExpected.Rep())
+}

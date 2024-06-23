@@ -2,7 +2,6 @@ package gamemodel
 
 import (
 	"github.com/pqviet030188/advance-chess-ai/bitboard"
-	"github.com/pqviet030188/advance-chess-ai/uint96"
 )
 
 type GameModel struct {
@@ -10,7 +9,20 @@ type GameModel struct {
 	NearPieces *bitboard.Bitboard
 	FarPieces  *bitboard.Bitboard
 
-	Wall         *bitboard.Bitboard
+	Wall *bitboard.Bitboard
+
+	NearZombie *bitboard.Bitboard
+	FarZombie  *bitboard.Bitboard
+
+	NearBuilder *bitboard.Bitboard
+	FarBuilder  *bitboard.Bitboard
+
+	NearDragon *bitboard.Bitboard
+	FarDragon  *bitboard.Bitboard
+
+	NearMiner *bitboard.Bitboard
+	FarMiner  *bitboard.Bitboard
+
 	NearSentinel *bitboard.Bitboard
 	FarSentinel  *bitboard.Bitboard
 
@@ -22,8 +34,10 @@ type GameModel struct {
 }
 
 func (model *GameModel) GetNearPieces(update bool) *bitboard.Bitboard {
-	zero := uint96.FromUInt32(0)
-	nearPiecesNumber := model.NearSentinel.Or(zero)
+	// zero := uint96.FromUInt32(0)
+	nearPiecesNumber := model.NearSentinel.Or(*model.NearDragon.Uint96).Or(
+		*model.NearMiner.Uint96).Or(*model.NearBuilder.Uint96).Or(
+		*model.NearZombie.Uint96)
 	nearPieces := &bitboard.Bitboard{
 		Uint96: &nearPiecesNumber,
 	}
@@ -35,8 +49,10 @@ func (model *GameModel) GetNearPieces(update bool) *bitboard.Bitboard {
 }
 
 func (model *GameModel) GetFarPieces(update bool) *bitboard.Bitboard {
-	zero := uint96.FromUInt32(0)
-	farPiecesNumber := model.FarSentinel.Or(zero)
+	// zero := uint96.FromUInt32(0)
+	farPiecesNumber := model.FarSentinel.Or(*model.FarDragon.Uint96).Or(
+		*model.FarMiner.Uint96).Or(*model.FarBuilder.Uint96).Or(
+		*model.FarZombie.Uint96)
 	farPieces := &bitboard.Bitboard{
 		Uint96: &farPiecesNumber,
 	}
