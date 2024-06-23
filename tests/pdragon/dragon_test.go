@@ -45,7 +45,8 @@ func setup(
 	}
 
 	model.GetEverything(false, true)
-
+	model.CalculateSentinelProtection(NEAR, true)
+	model.CalculateSentinelProtection(FAR, true)
 	return model
 }
 
