@@ -6,8 +6,8 @@ import (
 	"time"
 
 	. "github.com/pqviet030188/advance-chess-ai/bitboard"
-	"github.com/pqviet030188/advance-chess-ai/dragon"
 	"github.com/pqviet030188/advance-chess-ai/gamemodel"
+	"github.com/pqviet030188/advance-chess-ai/miner"
 )
 
 func setup(
@@ -49,7 +49,7 @@ func setup(
 	return model
 }
 
-func TestDragonMoveAttack(t *testing.T) {
+func TestMinerMoveAttack(t *testing.T) {
 	wall := `
 		000000000
 		001000000
@@ -113,7 +113,7 @@ func TestDragonMoveAttack(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack := dragon.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack, destroy := miner.GenerateMoves(C2, gamemodel.NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -123,10 +123,10 @@ func TestDragonMoveAttack(t *testing.T) {
 		000000000
 		000000000
 		001000000
-		101010000
-		011100000
+		001000000
+		001000000
 		010111000
-		011100000
+		001000000
 	`)
 
 	attackExpected := NewBitboardFromStr(`
@@ -141,6 +141,18 @@ func TestDragonMoveAttack(t *testing.T) {
 		000000000
 	`)
 
+	destroyExpected := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		100000000
+		000000000
+	`)
+
 	if !move.Uint96.Equals(*moveExpected.Uint96) {
 		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *move.Uint96, *moveExpected.Uint96)
 	}
@@ -149,14 +161,20 @@ func TestDragonMoveAttack(t *testing.T) {
 		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *attack.Uint96, *attackExpected.Uint96)
 	}
 
+	if !destroy.Uint96.Equals(*destroyExpected.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *destroy.Uint96, *destroyExpected.Uint96)
+	}
+
 	// fmt.Printf("everything:\n%s\n", model.Everything.Rep())
 	// fmt.Printf("near sentinel:\n%s\n", model.NearSentinel.Rep())
 	// fmt.Printf("far sentinel:\n%s\n", model.FarSentinel.Rep())
 	// fmt.Printf("move:\n%s\n", move.Rep())
+	// fmt.Printf("moveExpected:\n%s\n", moveExpected.Rep())
 	// fmt.Printf("attack:\n%s\n", attack.Rep())
+	// fmt.Printf("attackExpected:\n%s\n", attackExpected.Rep())
 }
 
-func TestDragonMoveAttackWithNearbyAttack(t *testing.T) {
+func TestMinerMoveAttackWithNearbyAttack(t *testing.T) {
 	wall := `
 		000000000
 		001000000
@@ -220,7 +238,7 @@ func TestDragonMoveAttackWithNearbyAttack(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack := dragon.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack, destroy := miner.GenerateMoves(C2, gamemodel.NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -230,96 +248,236 @@ func TestDragonMoveAttackWithNearbyAttack(t *testing.T) {
 		000000000
 		000000000
 		000000000
+		000000000
+		000000000
+		010111000
+		001000000
+	`)
+
+	attackExpected := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		001000000
+		000000100
+		000000000
+	`)
+
+	destroyExpected := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
 		100000000
+		000000000
+	`)
+
+	if !move.Uint96.Equals(*moveExpected.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *move.Uint96, *moveExpected.Uint96)
+	}
+
+	if !attack.Uint96.Equals(*attackExpected.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *attack.Uint96, *attackExpected.Uint96)
+	}
+
+	if !destroy.Uint96.Equals(*destroyExpected.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *destroy.Uint96, *destroyExpected.Uint96)
+	}
+
+	// fmt.Printf("everything:\n%s\n", model.Everything.Rep())
+	// fmt.Printf("near sentinel:\n%s\n", model.NearSentinel.Rep())
+	// fmt.Printf("far sentinel:\n%s\n", model.FarSentinel.Rep())
+	// fmt.Printf("move:\n%s\n", move.Rep())
+	// fmt.Printf("attack:\n%s\n", attack.Rep())
+}
+
+func TestMinerMoveAttackWithEnemySentinelProtection(t *testing.T) {
+	wall := `
+		000000000
+		001000000
+		000000000
+		000000100
+		000000000
+		000000000
+		000000000
+		100000010
+		000000000
+	`
+
+	nearPieces := `
+		000000000
+		001010000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		001000010
+		000000000
+	`
+
+	farPieces := `
+		000000000
+		000000000
+		000000000
+		001101000
+		000001000
+		001100000
+		100100000
+		000000100
+		000000000
+	`
+
+	nearSentinel := `
+		000000000
+		000010000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`
+
+	farSentinel := `
+		000000000
+		000000000
+		000000000
+		000101000
+		000000000
+		000100000
+		100000000
+		000000000
+		000000000
+	`
+
+	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+
+	start := time.Now()
+	move, attack, destroy := miner.GenerateMoves(C2, gamemodel.NEAR, model)
+	duration := time.Since(start)
+	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
+
+	moveExpected := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		001000000
+		010111000
+		001000000
+	`)
+
+	attackExpected := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000100
+		000000000
+	`)
+
+	destroyExpected := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		100000000
+		000000000
+	`)
+
+	if !move.Uint96.Equals(*moveExpected.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *move.Uint96, *moveExpected.Uint96)
+	}
+
+	if !attack.Uint96.Equals(*attackExpected.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *attack.Uint96, *attackExpected.Uint96)
+	}
+
+	if !destroy.Uint96.Equals(*destroyExpected.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *destroy.Uint96, *destroyExpected.Uint96)
+	}
+
+	// fmt.Printf("everything:\n%s\n", model.Everything.Rep())
+	// fmt.Printf("near sentinel:\n%s\n", model.NearSentinel.Rep())
+	// fmt.Printf("far sentinel:\n%s\n", model.FarSentinel.Rep())
+	// fmt.Printf("move:\n%s\n", move.Rep())
+	// fmt.Printf("attack:\n%s\n", attack.Rep())
+	// fmt.Printf("attackExpected:\n%s\n", attackExpected.Rep())
+}
+
+func TestMinerMoveAttackWithFalseEnemySentinelProtection(t *testing.T) {
+	wall := `
+		000000000
+		001000000
+		000000000
+		000000100
+		000000000
+		000000000
+		000000000
+		100000010
+		000000000
+	`
+
+	nearPieces := `
+		000000000
+		001010000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		001000010
+		000000000
+	`
+
+	farPieces := `
+		000000000
+		000000000
+		000000000
+		001101000
+		000101000
+		001100000
+		010100000
+		000000100
+		000000000
+	`
+
+	nearSentinel := `
+		000000000
+		000010000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+	`
+
+	farSentinel := `
+		000000000
+		000000000
+		000000000
+		000101000
+		000100000
+		000000000
 		010000000
-		010111000
-		011100000
-	`)
-
-	attackExpected := NewBitboardFromStr(`
-		000000000
-		000000000
-		000000000
-		000000000
-		000000000
-		000000000
-		000000000
-		000000100
-		000000000
-	`)
-
-	if !move.Uint96.Equals(*moveExpected.Uint96) {
-		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *move.Uint96, *moveExpected.Uint96)
-	}
-
-	if !attack.Uint96.Equals(*attackExpected.Uint96) {
-		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *attack.Uint96, *attackExpected.Uint96)
-	}
-
-	// fmt.Printf("everything:\n%s\n", model.Everything.Rep())
-	// fmt.Printf("near sentinel:\n%s\n", model.NearSentinel.Rep())
-	// fmt.Printf("far sentinel:\n%s\n", model.FarSentinel.Rep())
-	// fmt.Printf("move:\n%s\n", move.Rep())
-	// fmt.Printf("attack:\n%s\n", attack.Rep())
-}
-
-func TestDragonMoveAttackWithEnemySentinelProtection(t *testing.T) {
-	wall := `
-		000000000
-		001000000
-		000000000
-		000000100
-		000000000
-		000000000
-		000000000
-		100000010
-		000000000
-	`
-
-	nearPieces := `
-		000000000
-		001010000
-		000000000
-		000000000
-		000000000
-		000000000
-		000000000
-		001000010
-		000000000
-	`
-
-	farPieces := `
-		000000000
-		000000000
-		000000000
-		001101000
-		000001000
-		001100000
-		000100000
-		000000100
-		000000000
-	`
-
-	nearSentinel := `
-		000000000
-		000010000
-		000000000
-		000000000
-		000000000
-		000000000
-		000000000
-		000000000
-		000000000
-	`
-
-	farSentinel := `
-		000000000
-		000000000
-		000000000
-		000101000
-		000000000
-		000100000
-		000000000
 		000000000
 		000000000
 	`
@@ -327,7 +485,7 @@ func TestDragonMoveAttackWithEnemySentinelProtection(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack := dragon.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack, destroy := miner.GenerateMoves(C2, gamemodel.NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -337,10 +495,10 @@ func TestDragonMoveAttackWithEnemySentinelProtection(t *testing.T) {
 		000000000
 		000000000
 		000000000
-		100000000
-		011000000
+		000000000
+		001000000
 		010111000
-		011100000
+		001000000
 	`)
 
 	attackExpected := NewBitboardFromStr(`
@@ -349,9 +507,21 @@ func TestDragonMoveAttackWithEnemySentinelProtection(t *testing.T) {
 		000000000
 		000000000
 		000000000
-		000000000
+		001000000
 		000000000
 		000000100
+		000000000
+	`)
+
+	destroyExpected := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		100000000
 		000000000
 	`)
 
@@ -361,6 +531,10 @@ func TestDragonMoveAttackWithEnemySentinelProtection(t *testing.T) {
 
 	if !attack.Uint96.Equals(*attackExpected.Uint96) {
 		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *attack.Uint96, *attackExpected.Uint96)
+	}
+
+	if !destroy.Uint96.Equals(*destroyExpected.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *destroy.Uint96, *destroyExpected.Uint96)
 	}
 
 	// fmt.Printf("everything:\n%s\n", model.Everything.Rep())
@@ -371,115 +545,7 @@ func TestDragonMoveAttackWithEnemySentinelProtection(t *testing.T) {
 	// fmt.Printf("attackExpected:\n%s\n", attackExpected.Rep())
 }
 
-func TestDragonMoveAttackWithFalseEnemySentinelProtection(t *testing.T) {
-	wall := `
-		000000000
-		001000000
-		000000000
-		000000100
-		000000000
-		000000000
-		000000000
-		100000010
-		000000000
-	`
-
-	nearPieces := `
-		000000000
-		001010000
-		000000000
-		000000000
-		000000000
-		000000000
-		000000000
-		001000010
-		000000000
-	`
-
-	farPieces := `
-		000000000
-		000000000
-		000000000
-		001101000
-		000101000
-		001100000
-		000100000
-		000000100
-		000000000
-	`
-
-	nearSentinel := `
-		000000000
-		000010000
-		000000000
-		000000000
-		000000000
-		000000000
-		000000000
-		000000000
-		000000000
-	`
-
-	farSentinel := `
-		000000000
-		000000000
-		000000000
-		000101000
-		000100000
-		000000000
-		000000000
-		000000000
-		000000000
-	`
-
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
-
-	start := time.Now()
-	move, attack := dragon.GenerateMoves(C2, gamemodel.NEAR, model)
-	duration := time.Since(start)
-	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
-
-	moveExpected := NewBitboardFromStr(`
-		000000000
-		000000000
-		000000000
-		000000000
-		000000000
-		100000000
-		011000000
-		010111000
-		011100000
-	`)
-
-	attackExpected := NewBitboardFromStr(`
-		000000000
-		000000000
-		000000000
-		000000000
-		000000000
-		001000000
-		000000000
-		000000100
-		000000000
-	`)
-
-	if !move.Uint96.Equals(*moveExpected.Uint96) {
-		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *move.Uint96, *moveExpected.Uint96)
-	}
-
-	if !attack.Uint96.Equals(*attackExpected.Uint96) {
-		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *attack.Uint96, *attackExpected.Uint96)
-	}
-
-	// fmt.Printf("everything:\n%s\n", model.Everything.Rep())
-	// fmt.Printf("near sentinel:\n%s\n", model.NearSentinel.Rep())
-	// fmt.Printf("far sentinel:\n%s\n", model.FarSentinel.Rep())
-	// fmt.Printf("move:\n%s\n", move.Rep())
-	// fmt.Printf("attack:\n%s\n", attack.Rep())
-	// fmt.Printf("attackExpected:\n%s\n", attackExpected.Rep())
-}
-
-func TestDragonMoveAttackWithCrossAttackEnemy(t *testing.T) {
+func TestMinerMoveAttackWithCrossAttackEnemy(t *testing.T) {
 	wall := `
 		000000000
 		001000000
@@ -543,7 +609,7 @@ func TestDragonMoveAttackWithCrossAttackEnemy(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack := dragon.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack, destroy := miner.GenerateMoves(C2, gamemodel.NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -553,10 +619,10 @@ func TestDragonMoveAttackWithCrossAttackEnemy(t *testing.T) {
 		000000000
 		000000000
 		000000000
-		100000000
-		011100000
+		000000000
+		001000000
 		010111000
-		011100000
+		001000000
 	`)
 
 	attackExpected := NewBitboardFromStr(`
@@ -565,9 +631,21 @@ func TestDragonMoveAttackWithCrossAttackEnemy(t *testing.T) {
 		000000000
 		000000000
 		000000000
-		001010000
+		001000000
 		000000000
 		000000100
+		000000000
+	`)
+
+	destroyExpected := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		100000000
 		000000000
 	`)
 
@@ -579,6 +657,10 @@ func TestDragonMoveAttackWithCrossAttackEnemy(t *testing.T) {
 		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *attack.Uint96, *attackExpected.Uint96)
 	}
 
+	if !destroy.Uint96.Equals(*destroyExpected.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *destroy.Uint96, *destroyExpected.Uint96)
+	}
+
 	// fmt.Printf("everything:\n%s\n", model.Everything.Rep())
 	// fmt.Printf("near sentinel:\n%s\n", model.NearSentinel.Rep())
 	// fmt.Printf("far sentinel:\n%s\n", model.FarSentinel.Rep())
@@ -588,7 +670,7 @@ func TestDragonMoveAttackWithCrossAttackEnemy(t *testing.T) {
 	// fmt.Printf("attackExpected:\n%s\n", attackExpected.Rep())
 }
 
-func TestDragonMoveAttackWithCrossAttackSentinelProtection(t *testing.T) {
+func TestMinerMoveAttackWithCrossAttackSentinelProtection(t *testing.T) {
 	wall := `
 		000000000
 		001000000
@@ -652,7 +734,7 @@ func TestDragonMoveAttackWithCrossAttackSentinelProtection(t *testing.T) {
 	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
-	move, attack := dragon.GenerateMoves(C2, gamemodel.NEAR, model)
+	move, attack, destroy := miner.GenerateMoves(C2, gamemodel.NEAR, model)
 	duration := time.Since(start)
 	fmt.Printf("time taken: %d\n", duration.Nanoseconds())
 
@@ -662,10 +744,10 @@ func TestDragonMoveAttackWithCrossAttackSentinelProtection(t *testing.T) {
 		000000000
 		000000000
 		000000000
-		100000000
-		011100000
+		000000000
+		001000000
 		010111000
-		011100000
+		001000000
 	`)
 
 	attackExpected := NewBitboardFromStr(`
@@ -680,12 +762,28 @@ func TestDragonMoveAttackWithCrossAttackSentinelProtection(t *testing.T) {
 		000000000
 	`)
 
+	destroyExpected := NewBitboardFromStr(`
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		000000000
+		100000000
+		000000000
+	`)
+
 	if !move.Uint96.Equals(*moveExpected.Uint96) {
 		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *move.Uint96, *moveExpected.Uint96)
 	}
 
 	if !attack.Uint96.Equals(*attackExpected.Uint96) {
 		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *attack.Uint96, *attackExpected.Uint96)
+	}
+
+	if !destroy.Uint96.Equals(*destroyExpected.Uint96) {
+		t.Errorf("Expected values to be the same, Result was incorrect, got: %x, want: %x.", *destroy.Uint96, *destroyExpected.Uint96)
 	}
 
 	// fmt.Printf("everything:\n%s\n", model.Everything.Rep())

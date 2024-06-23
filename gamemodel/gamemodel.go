@@ -1,6 +1,9 @@
 package gamemodel
 
-import "github.com/pqviet030188/advance-chess-ai/bitboard"
+import (
+	"github.com/pqviet030188/advance-chess-ai/bitboard"
+	"github.com/pqviet030188/advance-chess-ai/uint96"
+)
 
 type GameModel struct {
 	Everything *bitboard.Bitboard
@@ -16,6 +19,53 @@ type GameModel struct {
 	LrbtDict       *bitboard.BoardDictionary
 	HorizontalDict *bitboard.BoardDictionary
 	VerticalDict   *bitboard.BoardDictionary
+}
+
+func (model *GameModel) GetNearPieces(update bool) *bitboard.Bitboard {
+	zero := uint96.FromUInt32(0)
+	nearPiecesNumber := model.NearSentinel.Or(zero)
+	nearPieces := &bitboard.Bitboard{
+		Uint96: &nearPiecesNumber,
+	}
+	if update {
+		model.NearPieces = nearPieces
+	}
+
+	return nearPieces
+}
+
+func (model *GameModel) GetFarPieces(update bool) *bitboard.Bitboard {
+	zero := uint96.FromUInt32(0)
+	farPiecesNumber := model.FarSentinel.Or(zero)
+	farPieces := &bitboard.Bitboard{
+		Uint96: &farPiecesNumber,
+	}
+	if update {
+		model.FarPieces = farPieces
+	}
+
+	return farPieces
+}
+
+func (model *GameModel) GetEverything(updateSides bool, update bool) *bitboard.Bitboard {
+	nearPieces := model.NearPieces
+	farPieces := model.FarPieces
+
+	if updateSides {
+		nearPieces = model.GetNearPieces(update)
+		farPieces = model.GetNearPieces(update)
+	}
+
+	everythingNumber := nearPieces.Or(*farPieces.Uint96).Or(*model.Wall.Uint96)
+	everything := &bitboard.Bitboard{
+		Uint96: &everythingNumber,
+	}
+
+	if update {
+		model.Everything = everything
+	}
+
+	return everything
 }
 
 func (model *GameModel) GetEnemyPieces(side uint8) *bitboard.Bitboard {
