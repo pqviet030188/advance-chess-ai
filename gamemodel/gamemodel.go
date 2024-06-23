@@ -29,6 +29,9 @@ type GameModel struct {
 	NearJester *bitboard.Bitboard
 	FarJester  *bitboard.Bitboard
 
+	NearCatapult *bitboard.Bitboard
+	FarCatapult  *bitboard.Bitboard
+
 	NearGeneral *bitboard.Bitboard
 	FarGeneral  *bitboard.Bitboard
 
@@ -47,7 +50,7 @@ func (model *GameModel) GetNearPieces(update bool) *bitboard.Bitboard {
 	nearPiecesNumber := model.NearSentinel.Or(*model.NearDragon.Uint96).Or(
 		*model.NearMiner.Uint96).Or(*model.NearBuilder.Uint96).Or(
 		*model.NearZombie.Uint96).Or(*model.NearGeneral.Uint96).Or(
-		*model.NearJester.Uint96)
+		*model.NearJester.Uint96).Or(*model.NearCatapult.Uint96)
 
 	nearPieces := &bitboard.Bitboard{
 		Uint96: &nearPiecesNumber,
@@ -64,7 +67,7 @@ func (model *GameModel) GetFarPieces(update bool) *bitboard.Bitboard {
 	farPiecesNumber := model.FarSentinel.Or(*model.FarDragon.Uint96).Or(
 		*model.FarMiner.Uint96).Or(*model.FarBuilder.Uint96).Or(
 		*model.FarZombie.Uint96).Or(*model.FarGeneral.Uint96).Or(
-		*model.FarJester.Uint96)
+		*model.FarJester.Uint96).Or(*model.FarCatapult.Uint96)
 
 	farPieces := &bitboard.Bitboard{
 		Uint96: &farPiecesNumber,
