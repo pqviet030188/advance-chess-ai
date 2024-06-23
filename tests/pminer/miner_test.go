@@ -10,46 +10,6 @@ import (
 	miner "github.com/pqviet030188/advance-chess-ai/pminer"
 )
 
-func setup(
-	nearPieces string,
-	farPieces string,
-
-	wall string,
-	nearSetinel string,
-	farSentinel string,
-) *gamemodel.GameModel {
-	horizontalLookup := NewBoardDictionaryFromFile("../../artifacts/horizontalsm")
-	verticalLookup := NewBoardDictionaryFromFile("../../artifacts/verticalsm")
-	lrtbLookup := NewBoardDictionaryFromFile("../../artifacts/lrtbsm")
-	lrbtLookup := NewBoardDictionaryFromFile("../../artifacts/lrbtsm")
-	factMask := NewFactBoardDictionaryFromFile("../../artifacts/factmask")
-
-	nearPiecesBoard := NewBitboardFromStr(nearPieces)
-	farPiecesBoard := NewBitboardFromStr(farPieces)
-	wallBoard := NewBitboardFromStr(wall)
-
-	nearSentinelBoard := NewBitboardFromStr(nearSetinel)
-	farSentinelBoard := NewBitboardFromStr(farSentinel)
-
-	model := &gamemodel.GameModel{
-		NearPieces:     nearPiecesBoard,
-		FarPieces:      farPiecesBoard,
-		Wall:           wallBoard,
-		FactMask:       factMask,
-		LrtbDict:       lrtbLookup,
-		LrbtDict:       lrbtLookup,
-		HorizontalDict: horizontalLookup,
-		VerticalDict:   verticalLookup,
-		NearSentinel:   nearSentinelBoard,
-		FarSentinel:    farSentinelBoard,
-	}
-
-	model.GetEverything(false, true)
-	model.CalculateSentinelProtection(NEAR, true)
-	model.CalculateSentinelProtection(FAR, true)
-	return model
-}
-
 func TestMinerMoveAttack(t *testing.T) {
 	wall := `
 		000000000
@@ -111,7 +71,7 @@ func TestMinerMoveAttack(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack, destroy := miner.GenerateMoves(C2, NEAR, model)
@@ -236,7 +196,7 @@ func TestMinerMoveAttackWithNearbyAttack(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack, destroy := miner.GenerateMoves(C2, NEAR, model)
@@ -359,7 +319,7 @@ func TestMinerMoveAttackWithEnemySentinelProtection(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack, destroy := miner.GenerateMoves(C2, NEAR, model)
@@ -483,7 +443,7 @@ func TestMinerMoveAttackWithFalseEnemySentinelProtection(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack, destroy := miner.GenerateMoves(C2, NEAR, model)
@@ -607,7 +567,7 @@ func TestMinerMoveAttackWithCrossAttackEnemy(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack, destroy := miner.GenerateMoves(C2, NEAR, model)
@@ -732,7 +692,7 @@ func TestMinerMoveAttackWithCrossAttackSentinelProtection(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack, destroy := miner.GenerateMoves(C2, NEAR, model)
@@ -857,7 +817,7 @@ func TestMinerMoveAttackWithWalls(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack, destroy := miner.GenerateMoves(C2, NEAR, model)

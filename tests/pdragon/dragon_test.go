@@ -10,46 +10,6 @@ import (
 	dragon "github.com/pqviet030188/advance-chess-ai/pdragon"
 )
 
-func setup(
-	nearPieces string,
-	farPieces string,
-
-	wall string,
-	nearSetinel string,
-	farSentinel string,
-) *gamemodel.GameModel {
-	horizontalLookup := NewBoardDictionaryFromFile("../../artifacts/horizontalsm")
-	verticalLookup := NewBoardDictionaryFromFile("../../artifacts/verticalsm")
-	lrtbLookup := NewBoardDictionaryFromFile("../../artifacts/lrtbsm")
-	lrbtLookup := NewBoardDictionaryFromFile("../../artifacts/lrbtsm")
-	factMask := NewFactBoardDictionaryFromFile("../../artifacts/factmask")
-
-	nearPiecesBoard := NewBitboardFromStr(nearPieces)
-	farPiecesBoard := NewBitboardFromStr(farPieces)
-	wallBoard := NewBitboardFromStr(wall)
-
-	nearSentinelBoard := NewBitboardFromStr(nearSetinel)
-	farSentinelBoard := NewBitboardFromStr(farSentinel)
-
-	model := &gamemodel.GameModel{
-		NearPieces:     nearPiecesBoard,
-		FarPieces:      farPiecesBoard,
-		Wall:           wallBoard,
-		FactMask:       factMask,
-		LrtbDict:       lrtbLookup,
-		LrbtDict:       lrbtLookup,
-		HorizontalDict: horizontalLookup,
-		VerticalDict:   verticalLookup,
-		NearSentinel:   nearSentinelBoard,
-		FarSentinel:    farSentinelBoard,
-	}
-
-	model.GetEverything(false, true)
-	model.CalculateSentinelProtection(NEAR, true)
-	model.CalculateSentinelProtection(FAR, true)
-	return model
-}
-
 func TestDragonMoveAttack(t *testing.T) {
 	wall := `
 		000000000
@@ -111,7 +71,7 @@ func TestDragonMoveAttack(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack := dragon.GenerateMoves(C2, NEAR, model)
@@ -218,7 +178,7 @@ func TestDragonMoveAttackWithNearbyAttack(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack := dragon.GenerateMoves(C2, NEAR, model)
@@ -325,7 +285,7 @@ func TestDragonMoveAttackWithEnemySentinelProtection(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack := dragon.GenerateMoves(C2, NEAR, model)
@@ -433,7 +393,7 @@ func TestDragonMoveAttackWithFalseEnemySentinelProtection(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack := dragon.GenerateMoves(C2, NEAR, model)
@@ -541,7 +501,7 @@ func TestDragonMoveAttackWithCrossAttackEnemy(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack := dragon.GenerateMoves(C2, NEAR, model)
@@ -650,7 +610,7 @@ func TestDragonMoveAttackWithCrossAttackSentinelProtection(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack := dragon.GenerateMoves(C2, NEAR, model)
@@ -759,7 +719,7 @@ func TestDragonMoveAttackWithWalls(t *testing.T) {
 		000000000
 	`
 
-	model := setup(nearPieces, farPieces, wall, nearSentinel, farSentinel)
+	model := gamemodel.SetupWithStrings(nearPieces, farPieces, wall, nearSentinel, farSentinel)
 
 	start := time.Now()
 	move, attack := dragon.GenerateMoves(C2, NEAR, model)
