@@ -1,4 +1,4 @@
-package pdragon_test
+package psentinel_test
 
 import (
 	"fmt"

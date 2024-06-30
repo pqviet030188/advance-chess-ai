@@ -1,4 +1,4 @@
-package zombie
+package pzombie
 
 import (
 	"fmt"

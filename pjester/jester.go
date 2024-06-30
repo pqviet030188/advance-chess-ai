@@ -1,4 +1,4 @@
-package zombie
+package pjester
 
 import (
 	"fmt"

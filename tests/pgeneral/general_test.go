@@ -1,4 +1,4 @@
-package pGeneral_test
+package pgeneral_test
 
 import (
 	"fmt"

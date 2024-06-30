@@ -1,4 +1,4 @@
-package pJester_test
+package pjester_test
 
 import (
 	"fmt"

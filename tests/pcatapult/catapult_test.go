@@ -1,4 +1,4 @@
-package pdragon_test
+package pcatapult_test
 
 import (
 	"fmt"

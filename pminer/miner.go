@@ -1,4 +1,4 @@
-package miner
+package pminer
 
 import (
 	"github.com/pqviet030188/advance-chess-ai/bitboard"

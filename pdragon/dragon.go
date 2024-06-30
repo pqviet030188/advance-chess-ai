@@ -1,4 +1,4 @@
-package dragon
+package pdragon
 
 import (
 	"github.com/pqviet030188/advance-chess-ai/bitboard"

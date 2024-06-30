@@ -1,4 +1,4 @@
-package dragon
+package pgeneral
 
 import (
 	"fmt"
@@ -12,6 +12,7 @@ func GenerateMoves(
 	side uint8,
 	model *gamemodel.GameModel,
 ) (move *bitboard.Bitboard, attack *bitboard.Bitboard) {
+
 	// get all moves
 	allMoves := bitboard.Nearby(square, model.FactMask)
 	if allMoves == nil {
