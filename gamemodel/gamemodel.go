@@ -136,6 +136,102 @@ func (model *GameModel) GetEnemyPieces(side uint8) *bitboard.Bitboard {
 	panic("Side is not valid")
 }
 
+func (model *GameModel) GetZombie(side uint8) *bitboard.Bitboard {
+	if side == bitboard.NEAR {
+		return model.NearZombie
+	}
+
+	if side == bitboard.FAR {
+		return model.FarZombie
+	}
+
+	panic("Side is not valid")
+}
+
+func (model *GameModel) GetEnemyZombie(side uint8) *bitboard.Bitboard {
+	if side == bitboard.NEAR {
+		return model.FarZombie
+	}
+
+	if side == bitboard.FAR {
+		return model.NearZombie
+	}
+
+	panic("Side is not valid")
+}
+
+func (model *GameModel) GetBuilder(side uint8) *bitboard.Bitboard {
+	if side == bitboard.NEAR {
+		return model.NearBuilder
+	}
+
+	if side == bitboard.FAR {
+		return model.FarBuilder
+	}
+
+	panic("Side is not valid")
+}
+
+func (model *GameModel) GetEnemyBuilder(side uint8) *bitboard.Bitboard {
+	if side == bitboard.NEAR {
+		return model.FarBuilder
+	}
+
+	if side == bitboard.FAR {
+		return model.NearBuilder
+	}
+
+	panic("Side is not valid")
+}
+
+func (model *GameModel) GetMiner(side uint8) *bitboard.Bitboard {
+	if side == bitboard.NEAR {
+		return model.NearMiner
+	}
+
+	if side == bitboard.FAR {
+		return model.FarMiner
+	}
+
+	panic("Side is not valid")
+}
+
+func (model *GameModel) GetEnemyMiner(side uint8) *bitboard.Bitboard {
+	if side == bitboard.NEAR {
+		return model.FarMiner
+	}
+
+	if side == bitboard.FAR {
+		return model.NearMiner
+	}
+
+	panic("Side is not valid")
+}
+
+func (model *GameModel) GetDragon(side uint8) *bitboard.Bitboard {
+	if side == bitboard.NEAR {
+		return model.NearDragon
+	}
+
+	if side == bitboard.FAR {
+		return model.FarDragon
+	}
+
+	panic("Side is not valid")
+}
+
+func (model *GameModel) GetEnemyDragon(side uint8) *bitboard.Bitboard {
+	if side == bitboard.NEAR {
+		return model.FarDragon
+	}
+
+	if side == bitboard.FAR {
+		return model.NearDragon
+	}
+
+	panic("Side is not valid")
+}
+
 func (model *GameModel) GetSentinel(side uint8) *bitboard.Bitboard {
 	if side == bitboard.NEAR {
 		return model.NearSentinel
@@ -155,6 +251,30 @@ func (model *GameModel) GetEnemySentinel(side uint8) *bitboard.Bitboard {
 
 	if side == bitboard.FAR {
 		return model.NearSentinel
+	}
+
+	panic("Side is not valid")
+}
+
+func (model *GameModel) GetCatapult(side uint8) *bitboard.Bitboard {
+	if side == bitboard.NEAR {
+		return model.NearCatapult
+	}
+
+	if side == bitboard.FAR {
+		return model.FarCatapult
+	}
+
+	panic("Side is not valid")
+}
+
+func (model *GameModel) GetEnemyCatapult(side uint8) *bitboard.Bitboard {
+	if side == bitboard.NEAR {
+		return model.FarCatapult
+	}
+
+	if side == bitboard.FAR {
+		return model.NearCatapult
 	}
 
 	panic("Side is not valid")
