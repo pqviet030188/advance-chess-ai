@@ -302,6 +302,27 @@ func Rsh128(hi uint64, lo uint64, n uint) (rhi uint64, rlo uint64) {
 	return
 }
 
+func (u Uint96) SetBitIndexes() []uint8 {
+	values := []uint32{u.Lo, u.Mid, u.Hi}
+	indexes := []uint8{}
+	for index, value := range values {
+
+		for value != 0 {
+
+			// trailing zeroes
+			trailingZeroCount := bits.TrailingZeros32(value)
+			leastSetBitIndex := uint8(32*index + trailingZeroCount)
+			indexes = append(indexes, leastSetBitIndex)
+
+			// remove the least bit 1
+			neg := -value
+			leastSetBitValue := value & neg
+			value = value ^ leastSetBitValue
+		}
+	}
+	return indexes
+}
+
 func (u Uint96) QuoRem(value Uint96) (Uint96, Uint96) {
 
 	u64Hi := uint64(u.Hi)

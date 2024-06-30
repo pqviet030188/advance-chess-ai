@@ -4,8 +4,6 @@ import (
 	// "fmt"
 
 	"fmt"
-
-	"github.com/pqviet030188/advance-chess-ai/bitboard"
 	// "github.com/pqviet030188/advance-chess-ai/dragon"
 )
 
@@ -36,10 +34,10 @@ func main() {
 	// mask := dragon.AttackMask(square)
 	// fmt.Printf("%s\n", mask.Rep())
 
-	bitboard.GenerateSlidingMoveDictionaryFile("./artifacts/horizontalsm", "./artifacts/verticalsm",
-		"./artifacts/lrtbsm", "./artifacts/lrbtsm")
+	// bitboard.GenerateSlidingMoveDictionaryFile("./artifacts/horizontalsm", "./artifacts/verticalsm",
+	// 	"./artifacts/lrtbsm", "./artifacts/lrbtsm")
 
-	horizontalLookup := bitboard.NewBoardDictionaryFromFile("./artifacts/horizontalsm")
+	// horizontalLookup := bitboard.NewBoardDictionaryFromFile("./artifacts/horizontalsm")
 	// verticalLookup := bitboard.NewBoardDictionaryFromFile("./artifacts/verticalsm")
 	// keys := horizontalDict.Keys()
 	// for _, key := range keys {
@@ -58,23 +56,23 @@ func main() {
 	// 	fmt.Scanf("%s", &mode)
 	// }
 
-	bitboard.GenerateFactMaskDictionaryFile("./artifacts/factmask")
-	factMask := bitboard.NewFactBoardDictionaryFromFile("./artifacts/factmask")
+	// bitboard.GenerateFactMaskDictionaryFile("./artifacts/factmask")
+	// factMask := bitboard.NewFactBoardDictionaryFromFile("./artifacts/factmask")
 
-	board := bitboard.NewBitboardFromStr(`
-		000000000
-		000010100
-		001000000
-		000000100
-		101001011
-		001000000
-		000000100
-		000010000
-		001000000
-	`)
+	// board := bitboard.NewBitboardFromStr(`
+	// 	000000000
+	// 	000010100
+	// 	001000000
+	// 	000000100
+	// 	101001011
+	// 	001000000
+	// 	000000100
+	// 	000010000
+	// 	001000000
+	// `)
 
-	result := board.HorizontalMove(bitboard.F5, factMask, horizontalLookup)
-	fmt.Printf("Board:\n%s\nResult:\n%s\n", board.Rep(), result.Rep())
+	// result := board.HorizontalMove(bitboard.F5, factMask, horizontalLookup)
+	// fmt.Printf("Board:\n%s\nResult:\n%s\n", board.Rep(), result.Rep())
 
 	// mask := bitboard.NewFactBoardDictionaryFromFile("./artifacts/factmask")
 	// for i := range bitboard.SIZE * bitboard.SIZE {
@@ -118,4 +116,8 @@ func main() {
 	// 	var mode string
 	// 	fmt.Scanf("%s", &mode)
 	// }
+
+	value := uint32(6)
+	negValue := -value
+	fmt.Printf("%b\n", negValue)
 }

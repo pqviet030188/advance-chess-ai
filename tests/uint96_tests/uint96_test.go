@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	. "github.com/pqviet030188/advance-chess-ai/uint96"
+	"github.com/pqviet030188/advance-chess-ai/utilities"
 )
 
 func zeroUInt96() Uint96 {
@@ -557,5 +558,57 @@ func TestGetBit(t *testing.T) {
 		if out != uint8(want) {
 			t.Errorf("Expected to be equals, Result was incorrect, got: %b, want: %b.", out, want)
 		}
+	}
+}
+
+func TestSetBitIndexesLow(t *testing.T) {
+	value := Uint96{
+		Lo:  0xe0000ee0,
+		Mid: 0,
+		Hi:  0,
+	}
+
+	indexes := value.SetBitIndexes()
+	compare := utilities.SliceCompare(indexes, []uint8{5, 6, 7, 9, 10, 11, 29, 30, 31})
+
+	if !compare {
+		t.Errorf("Expected to be equals")
+	}
+}
+
+func TestSetBitIndexesMid(t *testing.T) {
+	value := Uint96{
+		Lo:  0xe0000ee0,
+		Mid: 0xe0000ee0,
+		Hi:  0,
+	}
+
+	indexes := value.SetBitIndexes()
+	compare := utilities.SliceCompare(indexes, []uint8{
+		5, 6, 7, 9, 10, 11, 29, 30, 31,
+		37, 38, 39, 41, 42, 43, 61, 62, 63,
+	})
+
+	if !compare {
+		t.Errorf("Expected to be equals")
+	}
+}
+
+func TestSetBitIndexesHigh(t *testing.T) {
+	value := Uint96{
+		Lo:  0xe0000ee0,
+		Mid: 0xe0000ee0,
+		Hi:  0xe0000ee0,
+	}
+
+	indexes := value.SetBitIndexes()
+	compare := utilities.SliceCompare(indexes, []uint8{
+		5, 6, 7, 9, 10, 11, 29, 30, 31,
+		37, 38, 39, 41, 42, 43, 61, 62, 63,
+		69, 70, 71, 73, 74, 75, 93, 94, 95,
+	})
+
+	if !compare {
+		t.Errorf("Expected to be equals")
 	}
 }
