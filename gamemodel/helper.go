@@ -48,7 +48,7 @@ func SetupWithFacts(side uint8) *GameModel {
 func Update(model *GameModel, side uint8) {
 	enemySide := GetEnemySide(side)
 
+	model.GetEverything(true, true)
 	model.CalculateSentinelProtection(side, true)
 	model.CalculateSentinelProtection(enemySide, true)
-	model.GetEverything(true, true)
 }

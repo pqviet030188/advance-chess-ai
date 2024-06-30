@@ -85,7 +85,7 @@ func (model *GameModel) GetEverything(updateSides bool, update bool) *bitboard.B
 
 	if updateSides {
 		nearPieces = model.GetNearPieces(update)
-		farPieces = model.GetNearPieces(update)
+		farPieces = model.GetFarPieces(update)
 	}
 
 	everythingNumber := nearPieces.Or(*farPieces.Uint96).Or(*model.Wall.Uint96)
