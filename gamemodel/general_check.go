@@ -7,9 +7,9 @@ import (
 
 func (model *GameModel) IsGeneralBeingAttacked(square uint8, side uint8) bool {
 	general := model.GetGeneral(side)
-	if general.GetBit(square) == uint8(0) {
-		return false
-	}
+	// if general.GetBit(square) == uint8(0) {
+	// 	return false
+	// }
 
 	zero := uint96.FromUInt32(0)
 	protection := model.GetProtection(side)
@@ -35,6 +35,19 @@ func (model *GameModel) IsGeneralBeingAttacked(square uint8, side uint8) bool {
 	}
 
 	// --- check attacks of zombie ---
+	horSlidingBoard := model.Everything.HorizontalMoveOnly(square, model.FactMask, model.HorizontalDict)
+	verSlidingBoard := model.Everything.VerticalMoveOnly(square, model.FactMask, model.VerticalDict)
+	horVerSlidingMoves := horSlidingBoard.Or(*verSlidingBoard.Uint96)
+	lrbtSlidingBoard := model.Everything.LRBTMoveOnly(square, model.FactMask, model.LrbtDict)
+	lrtbSlidingBoard := model.Everything.LRTBMoveOnly(square, model.FactMask, model.LrtbDict)
+	directionalSlidingMoves := horVerSlidingMoves.Or(*lrbtSlidingBoard.Uint96).Or(*lrtbSlidingBoard.Uint96)
+
+	// temp := &bitboard.Bitboard{
+	// 	Uint96: &directionalSlidingMoves,
+	// }
+	// fmt.Printf("everything:\n%s\n", model.Everything.Rep())
+	// fmt.Printf("move:\n%s\n", temp.Rep())
+
 	// pretend that zombie is at current general spot, see if the zombie
 	// can attack enemy zombie
 	zombieMaskType := bitboard.ZOMBIE_FAR_ATTACK_MASK
@@ -50,15 +63,12 @@ func (model *GameModel) IsGeneralBeingAttacked(square uint8, side uint8) bool {
 	enemyZombie := model.GetEnemyZombie(side)
 
 	// enemy zombie attack mask includes enemy zombies (indicating that enemy zombies can attack us)
-	if !enemyZombieAttackMask.And(*enemyZombie.Uint96).Equals(zero) {
+	if !enemyZombieAttackMask.And(directionalSlidingMoves).And(*enemyZombie.Uint96).Equals(zero) {
 		return true
 	}
 
 	// --- check attacks of miner and dragon ---
 	enemyMiner := model.GetEnemyMiner(side)
-	horSlidingBoard := model.Everything.HorizontalMoveOnly(square, model.FactMask, model.HorizontalDict)
-	verSlidingBoard := model.Everything.VerticalMoveOnly(square, model.FactMask, model.VerticalDict)
-	horVerSlidingMoves := horSlidingBoard.Or(*verSlidingBoard.Uint96)
 
 	// vertical and horizontal sliding moves include enemy miners
 	if !horVerSlidingMoves.And(*enemyMiner.Uint96).Equals(zero) {
@@ -66,9 +76,6 @@ func (model *GameModel) IsGeneralBeingAttacked(square uint8, side uint8) bool {
 	}
 
 	enemyDragon := model.GetEnemyDragon(side)
-	lrbtSlidingBoard := model.Everything.LRBTMoveOnly(square, model.FactMask, model.LrbtDict)
-	lrtbSlidingBoard := model.Everything.LRTBMoveOnly(square, model.FactMask, model.LrtbDict)
-	directionalSlidingMoves := horVerSlidingMoves.Or(*lrbtSlidingBoard.Uint96).Or(*lrtbSlidingBoard.Uint96)
 	notnearbyMask, ok := model.FactMask.Get(square, bitboard.NOT_NEARBY_MASK)
 
 	if !ok {

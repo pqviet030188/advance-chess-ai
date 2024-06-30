@@ -100,7 +100,7 @@ func (model *GameModel) GetEverything(updateSides bool, update bool) *bitboard.B
 	return everything
 }
 
-func (model *GameModel) GetEnemySide(side uint8) uint8 {
+func GetEnemySide(side uint8) uint8 {
 	if side == bitboard.NEAR {
 		return bitboard.FAR
 	}
@@ -345,7 +345,7 @@ func (model *GameModel) CalculateSentinelProtection(side uint8, update bool) *bi
 }
 
 func (model *GameModel) CalculateEnemyProtection(side uint8, update bool) *bitboard.Bitboard {
-	enemySide := model.GetEnemySide(side)
+	enemySide := GetEnemySide(side)
 	return model.CalculateSentinelProtection(enemySide, update)
 }
 
